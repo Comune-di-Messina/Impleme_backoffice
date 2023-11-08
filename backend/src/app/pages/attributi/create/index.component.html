@@ -1,0 +1,105 @@
+<div class="row">
+
+  <div class="col-lg-12">
+    <div>
+      <nz-alert nzType="error" nzMessage="Attenzione" [nzDescription]="errorSave" nzShowIcon *ngIf="errorSave">
+      </nz-alert>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">
+          Crea attributo
+        </h2>
+        <p>
+          Inserisci una nuova attributo
+        </p>
+      <!-- </div>
+      <div class="card-body"> -->
+
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Campo</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il campo">
+              <input nz-input formControlName="campo" placeholder="Inserisci il campo..." />
+
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Editabile
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica se editabile">
+              <nz-select name="select-validate" formControlName="editabile">
+                <nz-option nzValue="true" nzLabel="Si"></nz-option>
+                <nz-option nzValue="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>          
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Obbligatorio
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica se obbligatorio">
+              <nz-select name="select-validate" formControlName="obbligatorio">
+                <nz-option nzValue="true" nzLabel="Si"></nz-option>
+                <nz-option nzValue="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Ripetibile
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica se ripetibile">
+              <nz-select name="select-validate" formControlName="ripetibile">
+                <nz-option nzValue="true" nzLabel="Si"></nz-option>
+                <nz-option nzValue="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>          
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Tipo dato</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il tipo dato">
+              <input nz-input formControlName="tipoDato" placeholder="Inserisci il tipo dato..." />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Causale template</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la causale template">
+              <input nz-input formControlName="causaleTemplate" placeholder="Inserisci la causale template..." />
+            </nz-form-control>
+          </nz-form-item>          
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Json Key</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la json key">
+              <input nz-input formControlName="jsonKey" placeholder="Inserisci la json key..." />
+            </nz-form-control>
+          </nz-form-item>     
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Lookup</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il lookup">
+              <input nz-input formControlName="lookup" placeholder="Inserisci il lookup..." />
+            </nz-form-control>
+          </nz-form-item>     
+
+          <nz-form-item>
+            <nz-form-control>
+              <button type="submit" class="btn btn-success px-5" [disabled]="validateForm.invalid">
+                Salva
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

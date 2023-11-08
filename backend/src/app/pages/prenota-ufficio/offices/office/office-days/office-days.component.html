@@ -1,0 +1,107 @@
+<div class="row mb-4">
+    <div class="col-12">
+        <h5>Aggiungi nuova data</h5>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th nzWidth="30%">Giorno</th>
+                    <th nzWidth="15%">Ora inizio</th>
+                    <th nzWidth="15%">Ora fine</th>
+                    <th nzWidth="15%" *ngIf="dateForm.reservable">Durata servizio</th>
+                    <th nzWidth="15%" *ngIf="dateForm.reservable">Contingency</th>
+                    <th nzWidth="15%">Apertura/Chiusura</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="dateForm.date"></nz-date-picker>
+                    </td>
+                    <td>
+                        <nz-time-picker
+                        [(ngModel)]="dateForm.startTime"
+                        [nzMinuteStep]="10"
+                        [nzSecondStep]="60"
+                        nzFormat="HH:mm"
+                      ></nz-time-picker>
+                    </td>
+                    <td>
+                        <nz-time-picker
+                        [(ngModel)]="dateForm.endTime"
+                        [nzMinuteStep]="10"
+                        [nzSecondStep]="60"
+                        nzFormat="HH:mm"
+                        [nzDisabled]="!dateForm.startTime"
+                      ></nz-time-picker>
+                    </td>
+                    <td *ngIf="dateForm.reservable">
+                        <nz-form-control>
+                            <input nz-input [(ngModel)]="dateForm.serviceDuration" placeholder="Durata del servizio in minuti" />
+                        </nz-form-control>
+                    </td>
+                    <td *ngIf="dateForm.reservable">
+                        <nz-form-control>
+                            <input nz-input [(ngModel)]="dateForm.contingency" placeholder="Contingency del servizio in minuti" />
+                        </nz-form-control>
+                    </td>
+                    <td>
+                        <nz-radio-group [(ngModel)]="dateForm.reservable">
+                            <label nz-radio [nzValue]="true">Aperto</label>
+                            <label nz-radio [nzValue]="false">Chiuso</label>
+                        </nz-radio-group>
+                    </td>
+                    <td>
+                        <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="!canAddTime" nz-popconfirm nzPopconfirmTitle="Sicuro di continuare?" (nzOnConfirm)="addDateTime()">
+                            Aggiungi
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h5>Lista date</h5>
+
+        <nz-table
+        #nzTable
+        nzShowPagination
+        nzShowSizeChanger
+        [nzData]="timeSlots"
+        (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+        class="kit__utils__table"
+      >
+        <thead>
+          <tr>
+            <th [nzWidth]="'15%'" [nzSortOrder]="'descend'" [nzSortFn]="sortByDate" [nzSortDirections]="['ascend', 'descend']">Data</th>
+            <th>Giorno</th>
+            <th>Ora inizio</th>
+            <th>Ora fine</th>
+            <th>Apertura/Chiusura</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of nzTable.data; let key = index;">
+            <td>{{ getDateTime(data) }}</td>
+            <td>{{ 'days.' + data.dayOfWeek | translate }}</td>
+            <td>{{ data.startTime }}</td>
+            <td>{{ data.endTime }}</td>
+            <td>
+                <nz-tag nzColor="green" *ngIf="data.reservable">Apertura straordinaria</nz-tag>
+                <nz-tag nzColor="red" *ngIf="!data.reservable">Chiusura straordinaria</nz-tag>
+            </td>
+            <td>
+                <button nz-button nzType="danger" nzDanger class="button button-danger mr-2" nz-popconfirm nzPopconfirmTitle="Sicuro di voler eliminare?" (nzOnConfirm)="deleteDate(data)">
+                    Elimina
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="row mb-4">
+    <div class="col-12">
+        <h5>Aggiungi nuovo orario</h5>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th nzWidth="30%">Giorno</th>
+                    <th nzWidth="15%">Ora inizio</th>
+                    <th nzWidth="15%">Ora fine</th>
+                    <th nzWidth="15%">Durata servizio</th>
+                    <th nzWidth="15%">Contingency</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <nz-select name="day" nzAllowClear [(ngModel)]="orarioForm.day">
+                            <nz-option [nzValue]="day.name" [nzLabel]="'days.' + day.name | translate" *ngFor="let day of daysTimeSlots; let key = index"></nz-option>
+                        </nz-select>
+                    </td>
+                    <td>
+                        <nz-time-picker
+                        [(ngModel)]="orarioForm.startTime"
+                        [nzMinuteStep]="10"
+                        [nzSecondStep]="60"
+                        nzFormat="HH:mm"
+                        (ngModelChange)="onStartTimeChange($event)"
+                      ></nz-time-picker>
+                    </td>
+                    <td>
+                        <nz-time-picker
+                        [(ngModel)]="orarioForm.endTime"
+                        [nzMinuteStep]="10"
+                        [nzSecondStep]="60"
+                        nzFormat="HH:mm"
+                        [nzDisabled]="!orarioForm.startTime"
+                      ></nz-time-picker>
+                    </td>
+                    <td>
+                        <nz-form-control>
+                            <input nz-input [(ngModel)]="orarioForm.serviceDuration" placeholder="Durata del servizio in minuti" />
+                        </nz-form-control>
+                    </td>
+                    <td>
+                        <nz-form-control>
+                            <input nz-input [(ngModel)]="orarioForm.contingency" placeholder="Contingency del servizio in minuti" />
+                        </nz-form-control>
+                    </td>
+                    <td>
+                        <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="!canAddTime" nz-popconfirm nzPopconfirmTitle="Sicuro di continuare?" (nzOnConfirm)="addOpeningTime()">
+                            Aggiungi
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h5>Lista orari di apertura</h5>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th nzWidth="14%" *ngFor="let day of daysTimeSlots; let key = index">
+                        <a nz-typography nzType="danger" class="delete-timeslot-icon" nzSize="small" nzDanger nz-popconfirm nzPopconfirmTitle="Eliminare tutti gli orari del giorno?" (nzOnConfirm)="deleteTimesAllDay(day)"><i nz-icon nzType="close" nzTheme="outline"></i></a>
+                        {{ 'days.' + day.name | translate }} 
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td *ngFor="let day of daysTimeSlots; let key = index">
+                        <ul class="timeslots-list">
+                            <li *ngFor="let timeSlot of day.timeSlots">
+                                <a nz-typography nzType="danger" class="delete-timeslot-icon" nzSize="small" nzDanger nz-popconfirm nzPopconfirmTitle="Eliminare questo orario?" (nzOnConfirm)="deleteTimeSlot(timeSlot)"><i nz-icon nzType="close" nzTheme="outline"></i></a>
+                                <a nz-typography nzType="danger" class="disable-timeslot-icon" nzSize="small" nzDanger nz-popconfirm [nzPopconfirmTitle]="timeSlot.reservable ? 'Disabilitare questo orario?' : 'Abilitare questo orario?'" (nzOnConfirm)="enableDisableTimeSlot(timeSlot, !timeSlot.reservable)"><i nz-icon [nzType]="timeSlot.reservable ? 'stop' : 'undo'" nzTheme="outline"></i></a>
+                                <span [ngClass]="{'not-reservable': !timeSlot.reservable}">{{ timeSlot.startTime }} - {{ timeSlot.endTime }}</span>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div id="reservation-page">
+    <div class="row mb-4">
+        <div class="col-12">
+            <a nz-button nzType="default" [routerLink]="'/prenota-ufficio/reservations'"><i nz-icon nzType="left"></i> Indietro</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="title-container mb-4">
+                <h2 class="mb-0">Visualizza prenotazione</h2>
+                <!-- <p class="mb-0">Sottotitolo</p> -->
+            </div>
+
+
+            <div class="header-actions-container">
+                <button nz-button nzType="primary" class="mr-3 mb-3 mt-1 btn btn-default" nz-popconfirm nzPopconfirmTitle="Sicuro di salvare?" *ngIf="availableActions.includes('CONFIRMED')" (nzOnConfirm)="changeReservationStatus('CONFIRMED')"><i nz-icon nzType="check"></i>Conferma</button>
+                <button nz-button nzType="default" class="mr-3 mb-3 mt-1 btn btn-success" nz-popconfirm nzPopconfirmTitle="Sicuro di salvare?" *ngIf="availableActions.includes('ESEGUITA')" (nzOnConfirm)="changeReservationStatus('ESEGUITA')"><i nz-icon nzType="check-square"></i>Eseguita</button>
+                <button nz-button nzType="danger" nzDanger class="mr-3 mb-3 mt-1 btn btn-danger" nz-popconfirm nzPopconfirmTitle="Sicuro di salvare?" *ngIf="availableActions.includes('REVOCATA')" (nzOnConfirm)="changeReservationStatus('REVOCATA')"><i nz-icon nzType="close"></i>Rifiuta</button>
+                <button nz-button nzType="secondary" nzDanger class="mr-3 mb-3 mt-1 btn btn-secondary" nz-popconfirm nzPopconfirmTitle="Sicuro di salvare?" *ngIf="availableActions.includes('RICHIESTA')" (nzOnConfirm)="changeReservationStatus('RICHIESTA')"><i nz-icon nzType="stop"></i>Richiesta</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="main-details-card-container mb-3">
+                <nz-card [nzTitle]="'Prenotazione'" [nzExtra]="extraTemplate">
+                    <!-- <h4 class="mb-1">{{ reporting?.title }}</h4>
+                    <h6 class="mb-4">{{ reporting?.type }}</h6> -->
+                    
+                    <div class="detail mb-4">
+                        <p class="mb-2" *ngIf="reservation.publicService">ID: <strong>{{ reservation.id | reservationId }}</strong></p>
+                        <p class="mb-2" *ngIf="reservation.publicService">Data: <strong>{{ reservationDate }}</strong></p>
+                        <p class="mb-2" *ngIf="reservation.publicService">Servizio: <strong>{{ reservation.publicService.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reservation.publicService">Descrizione: <strong>{{ reservation.publicService.notes }}</strong></p>
+                        <!-- <p class="mb-2" *ngIf="reporting.instituteDTO">Ente: <strong>{{ reporting.instituteDTO.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.sectorDTO">Settore: <strong>{{ reporting.sectorDTO.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.subSectorDTO">Sottosettore: <strong>{{ reporting.subSectorDTO.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.address">Indirizzo: <strong>{{ reporting.address }}</strong></p> -->
+                    </div>
+
+                    <div class="textarea-container">
+                        <textarea nz-input rows="6" placeholder="Note" [readonly]="true">{{ reservation?.notes }}</textarea>
+                    </div>
+                </nz-card>
+                <ng-template #extraTemplate>
+                    <label>Stato:&nbsp;</label>
+                    <nz-tag [nzColor]="getStatusColor">{{ getActiveStatus }}</nz-tag>
+                </ng-template>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="side-card-container mb-3" *ngIf="reservation.office">
+                <nz-card class="actions-side-container user-details-container">
+                    <h5 class="mb-4">Ufficio</h5>
+
+                    <div class="avatar-container" *ngIf="reservation.office.imageUrl">
+                        <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="reservation.office.imageUrl"></nz-avatar>
+                    </div>
+
+                    <ul class="user-details">
+                        <li>
+                            <label>Nome:</label>
+                            <span>{{ reservation.office.name }}</span>
+                        </li>
+                        <li>
+                            <label>Indirizzo:</label>
+                            <span>{{ reservation.office.address }}</span>
+                        </li>
+                        <li>
+                            <label>Telefono:</label>
+                            <span>{{ reservation.office.telephoneNumber }}</span>
+                        </li>
+                        <li>
+                            <label>Email:</label>
+                            <span>{{ reservation.office.email }}</span>
+                        </li>
+                    </ul>
+                </nz-card>
+            </div>
+
+            <div class="side-card-container mb-3" *ngIf="reservation.qrcode">
+                <nz-card class="actions-side-container user-details-container">
+                    <h5 class="mb-4">Codice QR</h5>
+
+                    <div class="qrcode-container">
+                        <img class="qrcode" [src]="'data:image/png;base64,' + reservation.qrcode" alt="">
+                    </div>
+                </nz-card>
+            </div>
+        </div>
+    </div>
+</div>

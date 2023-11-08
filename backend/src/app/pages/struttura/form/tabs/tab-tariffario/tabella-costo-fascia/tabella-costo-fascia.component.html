@@ -1,0 +1,92 @@
+<ng-container [formGroup]="costoFasciaItem">
+    <nz-table #basicTable
+        [nzFrontPagination]=false
+        [nzData]="[].constructor(fasce.controls.length)"
+        formArrayName="fasce"
+    >
+        <thead>
+            <tr>
+                <th>Orario inizio</th>
+                <th>Orario fine</th>
+                <th>Costo fascia</th>
+                <th *ngIf="checkRoute('struttura/create') || checkRoute('struttura/update')">Elimina</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of fasce.controls; let i = index;" [formGroupName]="i">
+                <tr>
+                    <td>
+                        <nz-time-picker
+                            formControlName="oraDa"
+                            [nzMinuteStep]="30"
+                            [nzSecondStep]="60"
+                            nzSize="large"
+                            (ngModelChange)="topOfTheHour($event);"
+                        ></nz-time-picker>
+                    </td>
+                    <td>
+                        <nz-time-picker
+                            formControlName="oraA"
+                            [nzMinuteStep]="30"
+                            [nzSecondStep]="60"
+                            nzSize="large"
+                            (ngModelChange)="topOfTheHour($event);"
+                        ></nz-time-picker>
+                    </td>
+                    <td>
+                        <nz-input-number
+                            formControlName="costoFascia"
+                            placeholder="Costo della fascia"
+                            [nzMin]	= "0"
+                            [nzStep]="0.01"
+                            [nzFormatter] = "formatterEuro"
+                            [nzParser] = "parserEuro"
+                        >
+                        </nz-input-number>
+                    </td>
+                    <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+                        <button nz-button nzType="default" nzDanger (click)="delItem(i); $event.preventDefault()"><i nz-icon nzType="delete"
+                                nzTheme="outline"></i></button>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+    <button
+        nz-button
+        class="mt-2 mr-2"
+        nzType="primary"
+        (click)="addItem(); $event.preventDefault()"
+        *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')"
+    >
+        <i nz-icon nzType="plus"></i>Aggiungi costo fascia
+    </button>
+    <nz-input-number-group 
+        nzCompact 
+        *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')"
+    >
+        <nz-input-number 
+        placeholder="Costo della fascia"
+        [(ngModel)]="costAllItem"
+        [ngModelOptions]="{standalone: true}"
+        [nzMin]	= "0"
+        [nzStep]="0.01"
+        [nzFormatter] = "formatterEuro"
+        [nzParser] = "parserEuro"
+        ></nz-input-number>
+        <button 
+            nz-button 
+            nzType="primary" 
+            nz-tooltip 
+            nzTooltipTitle="Applica costo a tutte le fasce"
+            (click)="$event.preventDefault()"
+            nz-popconfirm
+            nzPopconfirmTitle="Tutti i costi già presenti saranno sovrascritti. Continuare?"
+            nzPopconfirmPlacement="top"
+            (nzOnConfirm)="setCostAllItems()"
+        >
+            <span nz-icon nzType="copy" nzTheme="outline"></span>
+        </button>
+      </nz-input-number-group>
+
+</ng-container>

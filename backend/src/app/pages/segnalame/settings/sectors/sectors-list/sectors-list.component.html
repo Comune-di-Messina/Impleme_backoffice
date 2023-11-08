@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="mb-0">Settori</h2>
+        <p>Sottotitolo</p>
+        <button
+          nz-button
+          nzType="success"
+          class="mr-3 mb-3 mt-1 btn btn-info"
+          routerLink="/segnalame/settings/sectors/create"
+        >
+          Crea
+        </button>
+
+        <div class="table-container">
+            <nz-table 
+                nzShowPagination
+                nzShowSizeChanger
+                [nzPageSize]="10"
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+                class="kit__utils__table"
+                [nzData]="sectors"
+            >
+                <thead>
+                    <tr>
+                      <th
+                        *ngFor="let column of listOfColumns"
+                        [nzSortOrder]="column.sortOrder"
+                        [nzSortFn]="column.sortFn"
+                        [nzSortDirections]="column.sortDirections"
+                        [nzFilterMultiple]="column.filterMultiple"
+                        [nzFilters]="column.listOfFilter"
+                        [nzFilterFn]="column.filterFn"
+                      >
+                        {{ column.name }}
+                      </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of itemsInPage">
+                        <td><img class="table-icon" [src]="data.iconPath" alt="" *ngIf="data.iconPath"></td>
+                        <td>{{data.name}}</td>
+                        <td>{{data.description}}</td>
+                        <td>{{data.subtitle}}</td>
+                        <td>{{data.email}}</td>
+                        <td><i class="fa fa-check" *ngIf="data.enabled"></i></td>
+                        <td>
+                            <a
+                            nz-tooltip
+                            [nzTooltipTitle]="'Visualizza'"
+                            class="mr-3 btn btn-outline-primary"
+                            [routerLink]="'/segnalame/settings/sectors/view/' + data.id"
+                        >
+                            <i nz-icon nzType="eye"></i>
+                            </a>
+                        <a
+                            nz-tooltip
+                            [nzTooltipTitle]="'Modifica'"
+                            class="mr-3 btn btn-outline-primary"
+                            [routerLink]="'/segnalame/settings/sectors/edit/' + data.id"
+                        >
+                            <i nz-icon nzType="edit"></i>
+                        </a>
+                        <button
+                            nz-tooltip
+                            [nzTooltipTitle]="'Elimina'"
+                            class="mr-3 btn btn-danger"
+                            (click)="onDeleteModel(data)"
+                        >
+                            <i nz-icon nzType="delete"></i>
+                        </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

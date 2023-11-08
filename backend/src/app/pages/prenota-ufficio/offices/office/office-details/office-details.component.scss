@@ -1,0 +1,21 @@
+:host::ng-deep {
+  #map {
+    position: relative;
+    height: 400px;
+    width: 100%;
+    background-color: #f3f3f3;
+
+    @media (max-width: 768px) {
+      height: 300px;
+    }
+
+    .not-available {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 18px;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<nz-transfer
+[nzDataSource]="list"
+[nzTitles]="['Non assegnati', 'Assegnati']"
+[nzSearchPlaceholder]="'Cerca utente'"
+[nzItemUnit]="'Utente'"
+[nzItemsUnit]="'Utenti'"
+[nzListStyle]="{ 'width': 43 + '%', 'height.px': 480 }"
+[nzDisabled]="!edit"
+[nzRender]="render"
+nzShowSearch
+[nzFilterOption]="filterOption"
+(nzChange)="change($event)"
+>
+    <ng-template #render let-item>{{ item.title }}</ng-template>
+</nz-transfer>

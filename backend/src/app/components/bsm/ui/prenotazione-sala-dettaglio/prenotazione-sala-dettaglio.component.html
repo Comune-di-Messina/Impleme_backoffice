@@ -1,0 +1,85 @@
+<div>
+  <blockquote class="blockquote">
+    <h5>{{ titoloEvento }}</h5>
+    <p>{{ descrizioneEvento }}</p>
+  </blockquote>
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="Dati prenotazione" [nzExtra]="formIcon">
+        <p>Ha richiesto: <strong>{{ struttura }}</strong></p>
+        <p>Dal giorno <strong>{{ dataInizio }}</strong> al giorno <strong>{{ dataFine }}</strong></p>
+        <p>Dalle ore <strong>{{ oraInizio }}</strong> alle ore <strong>{{ oraFine }}</strong></p>
+        <p>Importo: <strong>{{ importo }}</strong> di cui <strong>{{ importoServizi }}</strong> per i seguenti servizi accessori richiesti:</p>
+        <ul *ngFor="let accessorio of accessori">
+          <li><strong>{{ accessorio?.descrizione }}</strong> (codice: <em>{{ accessorio?.codice }}</em>) alla tariffa di {{ formatImporto(accessorio?.importo) }}</li>
+        </ul>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="Allegati" [nzExtra]="fileIcon">
+        <div *ngFor="let document of allegati">
+          <div nz-row class="mt-1" >
+            <span nz-col nzSpan="24">Scarica <strong>{{document.description }}</strong>: <button nz-button nzType="primary" [nzSize]="16" (click)="onDocumentClick(document)">{{ document.fileName.length > 15 ? document.fileName.substring(0, 15)+'...': document.fileName}}<i nz-icon nzType="download"></i></button></span>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+  <hr>
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="Richiedente" [nzExtra]="userIcon">
+        <p>Nome: <strong>{{ richiedente.name }} {{ richiedente.surname }}</strong> - CF: <strong>{{ richiedente.codiFisc }}</strong></p>
+        <p>Nato a <strong>{{ richiedente.luogoNascita }}</strong> il <strong>{{ formatDate(richiedente.dataNascita) }}</strong></p>
+        <p>Residente a <strong>{{ richiedente.indirizzo.indirizzo }} {{ richiedente.indirizzo.civico }}, {{richiedente.indirizzo.cap}}, {{ richiedente.indirizzo.comune }} ({{richiedente.indirizzo.provincia}}), {{richiedente.indirizzo.stato}}</strong></p>
+        <p *ngIf="richiedente.telefono">Telefono: {{ richiedente.telefono }}</p>
+        <p *ngIf="richiedente.email">Indirizzo email: <strong><a href="mailto:{{richiedente.email}}">{{ richiedente.email }}</a></strong></p>
+        <p *ngIf="richiedente.flagEnte">Questo richiedente <strong>&egrave; un ente</strong></p>
+        <p *ngIf="richiedente.flagOrganizzatore">Questo richiedente <strong>&egrave; l'organizzatore</strong></p>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-card *ngIf="!richiedente.flagOrganizzatore" nzTitle="Organizzato da" [nzExtra]="userIcon">
+        <ng-container
+          *ngIf="organizzatore.piva===null; then personaFisica; else azienda">
+          <p *ngIf="organizzatore.flagEnte">Questo organizzatore <strong>&egrave; un ente</strong></p>
+        </ng-container>
+        <ng-template #personaFisica>
+          <p>Nome: <strong>{{ organizzatore.name }} {{ organizzatore.surname }}</strong> - CF: <strong>{{ organizzatore.codiFisc }}</strong></p>
+          <p>Nato a <strong>{{ organizzatore.luogoNascita }}</strong> il <strong>{{ formatDate(organizzatore.dataNascita) }}</strong></p>
+          <p *ngIf="organizzatore.telephoneNumber">Telefono: {{ organizzatore.telephoneNumber }}</p>
+          <p *ngIf="organizzatore.email">Indirizzo email: <strong><a href="mailto:{{organizzatore.email}}">{{ organizzatore.email }}</a></strong></p>
+        </ng-template>
+        <ng-template #azienda>
+          <p>Ragione sociale: <strong>{{ organizzatore.ragioneSociale }}</strong> - P. IVA: <strong>{{ organizzatore.piva }}</strong></p>
+          <p *ngIf="organizzatore.telephoneNumber">Telefono: {{ organizzatore.telephoneNumber }}</p>
+          <p *ngIf="organizzatore.email">Indirizzo email: <strong><a href="mailto:{{organizzatore.email}}">{{ organizzatore.email }}</a></strong></p>
+          <hr>
+          <h6>Rappresentante legale</h6>
+          <p>Nome: <strong>{{ rappresentanteLegale.nome }} {{ rappresentanteLegale.cognome }}</strong> - CF: <strong>{{ rappresentanteLegale.codiFisc }}</strong></p>
+          <p>Nato a <strong>{{ rappresentanteLegale.luogoNascita }}</strong> il <strong>{{ formatDate(rappresentanteLegale.dataNascita) }}</strong></p>
+          <p *ngIf="rappresentanteLegale.telefono">Telefono: {{ rappresentanteLegale.telefono }}</p>
+          <p *ngIf="rappresentanteLegale.email">Indirizzo email: <strong><a href="mailto:{{rappresentanteLegale.email}}">{{ rappresentanteLegale.email }}</a></strong></p>
+        </ng-template>
+      </nz-card>
+    </div>
+  </div>
+  <hr>
+  <div class="h4">Altri dati</div>
+  <p>Pratica inviata il: {{ dataInvio }}</p>
+  <p>Protocollo: {{ protocollo }}</p>
+  <p>Inviata a: {{ nomeEnte }}</p>
+</div>
+
+<ng-template #userIcon>
+  <nz-avatar [nzSize]="32" nzIcon="user"></nz-avatar>
+</ng-template>
+<ng-template #infoCirleIcon>
+  <nz-avatar [nzSize]="32" nzIcon="info-circle"></nz-avatar>
+</ng-template>
+<ng-template #formIcon>
+  <nz-avatar [nzSize]="32" nzIcon="form"></nz-avatar>
+</ng-template>
+<ng-template #fileIcon>
+  <nz-avatar [nzSize]="32" nzIcon="file-pdf"></nz-avatar>
+</ng-template>

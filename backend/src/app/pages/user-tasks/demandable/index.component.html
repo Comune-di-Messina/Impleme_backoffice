@@ -1,0 +1,132 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class=" mb-0">
+          Lista prenotazioni da prendere in carico
+        </h2>
+        <p>
+          Visualizza tutte le prenotazioni da prendere in carico
+        </p>
+        <p class="mb-2">
+          <button nz-button nzType="default" (click)="resetSearch()"><i nz-icon nzType="undo" nzTheme="outline"></i> Reset filtri</button>
+        </p>
+      <!-- </div>
+      <div class="card-body"> -->
+        <nz-table
+          #nzTable
+          nzShowPagination
+          nzShowSizeChanger
+          [nzPageSize]="10"
+          [nzScroll]="{ y: scrollSize }"
+          (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+          [nzData]="search()"
+        >
+          <thead>
+<!--            <tr>-->
+<!--              <th-->
+<!--                *ngFor="let column of listOfColumns"-->
+<!--                [nzSortOrder]="column.sortOrder"-->
+<!--                [nzSortFn]="column.sortFn"-->
+<!--                [nzSortDirections]="column.sortDirections"-->
+<!--                [nzFilterMultiple]="column.filterMultiple"-->
+<!--                [nzFilters]="column.listOfFilter"-->
+<!--                [nzFilterFn]="column.filterFn"-->
+<!--              >-->
+<!--                {{ column.name }}-->
+<!--              </th>-->
+<!--            </tr>-->
+            <tr>
+              <th [nzSortOrder]="'descend'"
+                  [nzSortFn]="sortID"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  nzCustomFilter>
+                ID
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.id"
+                  [nzActive]="searchForm.id?.length > 0"
+                  [nzDropdownMenu]="menuSearchID">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+              </th>
+              <th [nzSortOrder]="'descend'"
+                  [nzSortFn]="sortNumeroPratica"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  nzCustomFilter>
+                Numero pratica
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.numeroPratica"
+                  [nzActive]="searchForm.numeroPratica?.length > 0"
+                  [nzDropdownMenu]="menuSearchNumeroPratica">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+              </th>
+              <th>Data pren.</th>
+              <th>Tit. evento</th>
+              <th>Desc. evento</th>
+              <th>Ente</th>
+              <th>Sala</th>
+              <th>Giorno Da</th>
+              <th>Giorno A</th>
+              <th>Ora Da</th>
+              <th>Ora A</th>
+              <th>Importo</th>
+              <th>Importo servizi</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of nzTable.data">
+              <td>{{ task.booking?.id }}</td>
+              <td>{{ task.booking?.numeroPratica }}</td>
+              <td>{{ getDateFormat(task.booking?.dataPrenotazione) }}</td>
+              <td>{{ task.booking?.titoloEvento }}</td>
+              <td>{{ task.booking?.descrizioneEvento }}</td>
+              <td>{{ getEnteNome(task?.booking?.ente ) }}</td>
+              <td>{{ task.booking?.nome }}</td>
+              <td>{{ task.booking?.giornoDa | dateLocalized }}</td>
+              <td>{{ task.booking?.giornoA | dateLocalized }}</td>
+              <td>{{ task.booking?.oraDa }}</td>
+              <td>{{ task.booking?.oraA }}</td>
+              <td>{{ task.booking?.importo | currencyLocalized }}</td>
+              <td>{{ task.booking?.importoServizi | currencyLocalized }}</td>
+              <td>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Assegna il task'"
+                  class="mr-3 btn btn-outline-primary"
+                  (click)="onClaim(task)"
+                  *ngIf="getAclService().checkRoute('user-tasks/claim')"
+                >
+                  <i nz-icon nzType="plus"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <nz-dropdown-menu #menuSearchID="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Cerca ID" [(ngModel)]="searchForm.id" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('id')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuSearchNumeroPratica="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Cerca pratica" [(ngModel)]="searchForm.numeroPratica" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('numeroPratica')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

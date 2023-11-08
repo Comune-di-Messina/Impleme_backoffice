@@ -1,0 +1,44 @@
+<ng-container [formGroup]="validateForm">
+    <nz-table #basicTable [nzData]="[].constructor(servizi.controls.length)" formArrayName="servizi">
+        <thead>
+            <tr>
+                <th>Codice</th>
+                <th>Importo</th>
+                <th>Descrizione</th>
+                <th>Note</th>
+                <th *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">Elimina</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of servizi.controls; let i = index;" [formGroupName]="i">
+                <td>
+                    <input nz-input formControlName="codice" placeholder="Inserire il codice" required />
+                </td>
+                <td>
+                    <nz-input-number 
+                        formControlName="importo"
+                        placeholder="Inserire l'importo"
+                        required
+                        [nzMin]	= "0"
+                        [nzStep]="0.01"
+                        [nzFormatter] = "formatterEuro"
+                        [nzParser] = "parserEuro"
+                    ></nz-input-number>
+                </td>
+                <td>
+                    <input nz-input formControlName="descrizione" placeholder="Inserire la descrizione" required />
+                </td>
+                <td>
+                    <input nz-input formControlName="note" placeholder="Inserire le note" required />
+                </td>
+                <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+                    <button nz-button nzType="default" nzDanger (click)="delServizio(i); $event.preventDefault()"><i nz-icon nzType="delete"
+                            nzTheme="outline"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+    <button nz-button class="mt-2" nzType="primary" (click)="addServizio(); $event.preventDefault()"><i nz-icon nzType="plus"></i>Aggiungi</button>
+
+</ng-container>

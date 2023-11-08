@@ -1,0 +1,35 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+
+  <nz-tabset nzType="card" nzSelectedIndex="0">
+    <nz-tab nzTitle="Informazioni di base">
+      <struttura-create-tab-info-base [validateForm]="validateForm"></struttura-create-tab-info-base>
+
+    </nz-tab>
+
+    <nz-tab [nzTitle]=" 'Aperture (' + aperture.length + ')' ">
+      <struttura-create-tab-aperture [validateForm]="validateForm"></struttura-create-tab-aperture>
+    </nz-tab>
+
+    <nz-tab [nzTitle]=" 'Tariffario (' + tariffario.length + ')' ">
+      <struttura-create-tab-tariffario [validateForm]="validateForm"></struttura-create-tab-tariffario>
+    </nz-tab>
+
+    <div>
+      <nz-tab [nzTitle]=" 'Eventi (' + eventi.length + ')' " >
+        <struttura-create-tab-eventi [validateForm]="validateForm"></struttura-create-tab-eventi>
+      </nz-tab>
+    </div>
+
+    <nz-tab [nzTitle]=" 'Servizi (' + servizi.length + ')' ">
+      <struttura-create-tab-servizi [validateForm]="validateForm"></struttura-create-tab-servizi>
+    </nz-tab>
+
+    <nz-tab [nzTitle]=" 'Riserve (' + riserve.length + ')' ">
+      <struttura-create-tab-restrizioni [validateForm]="validateForm"></struttura-create-tab-restrizioni>
+    </nz-tab>
+
+
+  </nz-tabset>
+
+</form>

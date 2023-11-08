@@ -1,0 +1,192 @@
+<ng-container [formGroup]="validateForm">
+  <nz-table
+    #basicTable
+    [nzData]="[].constructor(tariffario.controls.length)"
+    formArrayName="tariffario"
+  >
+    <thead>
+      <tr>
+        <th></th>
+        <th>Evento</th>
+        <th>Tariffa<br />oraria</th>
+        <th>Intera giornata</th>
+        <th>Tariffa<br />giornaliera</th>
+        <th>Intera settimana</th>
+        <th>Tariffa<br />settimanale</th>
+        <th>Note</th>
+        <th>Elimina</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of tariffario.controls; let i = index" [formGroupName]="i">
+        <tr>
+          <td class="nowrap" [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)">
+            Costo fasce{{' '}}
+            <span 
+              class="info-icon-costofasce" 
+              *ngIf="tariffario.controls[i].value.costoFasce.length > 0" 
+              nz-icon 
+              nzType="info-circle" 
+              nzTheme="outline" 
+              nz-tooltip 
+              [nzTooltipTitle]="'Sono presenti ' + tariffario.controls[i].value.costoFasce.length + ' fasce giornaliere'">
+            </span>
+          </td>
+          <td>
+            <input nz-input formControlName="evento" required placeholder="Inserire l'evento" />
+          </td>
+          <td>
+            <nz-input-number
+              formControlName="costoOrario"
+              required
+              [nzMin]	= "0"
+              [nzStep]="0.01"
+              [nzFormatter] = "formatterEuro"
+              [nzParser] = "parserEuro"
+              placeholder="Inserire il costo orario"
+              [value]="
+                !isCheckedInput(i, 'flagInteraSettimana') && tariffario.controls[i].value.costoFasce.length <= 0
+                  ? tariffario.controls[i].value.costoOrario
+                  : ''
+              "
+              [nzDisabled]="isCheckedInput(i, 'flagInteraSettimana') || tariffario.controls[i].value.costoFasce.length > 0"
+            ></nz-input-number>
+          </td>
+          <td>
+            <label
+              nz-checkbox
+              formControlName="flagInteraGiornata"
+              [nzChecked]="
+                isCheckedInput(i, 'flagInteraSettimana')
+                  ? false
+                  : isCheckedInput(i, 'flagInteraGiornata')
+              "
+              [nzDisabled]="isCheckedInput(i, 'flagInteraSettimana')"
+              >S&igrave;</label
+            >
+          </td>
+          <td>
+            <nz-input-number
+              formControlName="costoInteraGiornata"
+              [placeholder]="
+                isCheckedInput(i, 'flagInteraGiornata') && !isCheckedInput(i, 'flagInteraSettimana')
+                  ? 'Inserire il costo intera giornata'
+                  : 'Campo disabilitato'
+              "
+              [value]="
+                isCheckedInput(i, 'flagInteraGiornata') && !isCheckedInput(i, 'flagInteraSettimana')
+                  ? tariffario.controls[i].value.costoInteraGiornata
+                  : ''
+              "
+              [nzMin]	= "0"
+              [nzStep]="0.01"
+              [nzFormatter] = "formatterEuro"
+              [nzParser] = "parserEuro"
+              [readonly]="
+                !isCheckedInput(i, 'flagInteraGiornata') || isCheckedInput(i, 'flagInteraSettimana')
+              "
+              [nzDisabled]="
+                !isCheckedInput(i, 'flagInteraGiornata') || isCheckedInput(i, 'flagInteraSettimana')
+              "
+            ></nz-input-number>
+          </td>
+          <td>
+            <label
+              nz-checkbox
+              formControlName="flagInteraSettimana"
+              [nzChecked]="
+                isCheckedInput(i, 'flagInteraGiornata')
+                  ? false
+                  : isCheckedInput(i, 'flagInteraSettimana')
+              "
+              [nzDisabled]="isCheckedInput(i, 'flagInteraGiornata')"
+              >S&igrave;</label
+            >
+          </td>
+          <td>
+            <nz-input-number
+              formControlName="costoSettimanale"
+              [placeholder]="
+                isCheckedInput(i, 'flagInteraSettimana') && !isCheckedInput(i, 'flagInteraGiornata')
+                  ? 'Inserire il costo settimanale'
+                  : 'Campo disabilitato'
+              "
+              [nzFormatter] = "formatterEuro"
+              [nzParser] = "parserEuro"
+              [nzMin]	= "0"
+              [nzStep]="0.01"
+              [value]="
+                isCheckedInput(i, 'flagInteraSettimana') && !isCheckedInput(i, 'flagInteraGiornata')
+                  ? tariffario.controls[i].value.costoSettimanale
+                  : '0'
+              "
+              [nzDisabled]="
+                !isCheckedInput(i, 'flagInteraSettimana') || isCheckedInput(i, 'flagInteraGiornata')
+              "
+            ></nz-input-number>
+          </td>
+          <td>
+            <input nz-input formControlName="note" placeholder="Inserire le note" />
+          </td>
+          <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+            <button
+              nz-button
+              nzType="default"
+              nzDanger
+              (click)="delTariffario(i); $event.preventDefault()"
+            >
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+          </td>
+        </tr>
+        <tr [nzExpand]="expandSet.has(i)">
+          <tabella-fasce
+            [tariffarioItem]="tariffario.controls[i]"
+            *ngIf="
+              !isCheckedInput(i, 'flagInteraGiornata') 
+              && !isCheckedInput(i, 'flagInteraSettimana') 
+              && !tariffario.controls[i].value.costoOrario
+            "
+            (handleUpdateTariffario)="reloadTariffario(i)"
+          ></tabella-fasce>
+          <td
+            colspan="9"
+            *ngIf="
+              isCheckedInput(i, 'flagInteraGiornata') 
+              || isCheckedInput(i, 'flagInteraSettimana')
+              || tariffario.controls[i].value.costoOrario
+            "
+          >
+            <div>
+              <span class="h6">
+                <i nz-icon nzType="info-circle"></i>
+                Non &egrave; supportato l'inserimento dei costi delle singole fasce giornaliere se
+                è stata inserita una tariffa oraria generale oppure se si offre la possibilità
+                di prenotare un'intera giornata o un'intera settimana.
+              </span>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+
+  <button
+    nz-button
+    class="mt-2"
+    nzType="primary"
+    (click)="addTariffario(-1); $event.preventDefault()"
+    *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')"
+  >
+    <i nz-icon nzType="plus"></i>Aggiungi Tariffario per Evento
+  </button>
+
+  <!-- <button
+    nz-button
+    class="mt-2 ml-2"
+    nzType="success"
+    (click)="refresh(); $event.preventDefault()"
+  >
+    <i nz-icon nzType="redo"></i>Rigenera costi fasce per tutti i tariffari
+  </button> -->
+</ng-container>

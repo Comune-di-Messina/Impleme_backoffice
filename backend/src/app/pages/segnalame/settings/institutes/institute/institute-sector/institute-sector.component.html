@@ -1,0 +1,201 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div>
+      <nz-alert
+        nzType="error"
+        nzMessage="Attenzione"
+        [nzDescription]="errorSave"
+        nzShowIcon
+        *ngIf="errorSave"
+      >
+      </nz-alert>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <p>
+      <a nz-button nzType="default" [routerLink]="'/segnalame/settings/institutes/edit/' + institute.id" *ngIf="institute && edit"><i nz-icon nzType="left"></i> Indietro</a>
+      <a nz-button nzType="default" [routerLink]="'/segnalame/settings/institutes/view/' + institute.id" *ngIf="institute && !edit"><i nz-icon nzType="left"></i> Indietro</a>
+    </p>
+    <h2 class="mb-0" *ngIf="pageTitle">
+      {{ pageTitle }}
+    </h2>
+    <p *ngIf="pageSubtitle">
+      {{ pageSubtitle }}
+    </p>
+
+    <div class="card-container mt-4">
+      <nz-tabset nzType="card">
+        <nz-tab [nzTitle]="'Dettagli'">
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+                <nz-form-item>
+                  <nz-form-label [nzRequired]="true" [nzSm]="4" [nzXs]="24" nzFor="name" class="text-left"
+                    >Nome</nz-form-label
+                  >
+                  <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il nome">
+                    <input
+                      nz-input
+                      formControlName="name"
+                      placeholder="Inserisci il nome..."
+                      required
+                      [readonly]="!edit"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-label
+                    [nzRequired]="false"
+                    [nzSm]="4"
+                    [nzXs]="24"
+                    nzFor="subtitle"
+                    class="text-left"
+                    >Sottotitolo</nz-form-label
+                  >
+                  <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il sottotitolo">
+                    <input
+                      nz-input
+                      formControlName="subtitle"
+                      placeholder="Inserisci il sottotitolo..."
+                      [readonly]="!edit"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-label
+                    [nzRequired]="false"
+                    [nzSm]="4"
+                    [nzXs]="24"
+                    nzFor="email"
+                    class="text-left"
+                    >Email</nz-form-label
+                  >
+                  <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci l'indirizzo email">
+                    <input
+                      nz-input
+                      formControlName="email"
+                      placeholder="Inserisci l'indirizzo email..."
+                      [readonly]="!edit"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-label
+                    [nzRequired]="false"
+                    [nzSm]="4"
+                    [nzXs]="24"
+                    nzFor="description"
+                    class="text-left"
+                    >Descrizione</nz-form-label
+                  >
+                  <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="errorTip">
+                    <textarea
+                      nz-input
+                      formControlName="description"
+                      rows="4"
+                      placeholder="Inserisci la descrizione"
+                      [readonly]="!edit"
+                    ></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="enabled" class="text-left"
+                    >Attivato</nz-form-label
+                  >
+                  <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Attivato">
+                    <label
+                      nz-checkbox
+                      formControlName="enabled"
+                      [nzChecked]="sector.enabled"
+                      [nzDisabled]="!edit"
+                      [nzValue]="1"
+                    >
+                    </label>
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="icon" class="text-left"
+                    >Icona (Max. 1MB)</nz-form-label
+                  >
+                  <nz-form-control>
+                    <nz-avatar
+                      [nzShape]="'square'"
+                      [nzSize]="64"
+                      [nzText]="'Icon'"
+                      [nzSrc]="sector.iconPath"
+                    ></nz-avatar>
+                    <input
+                      nz-button
+                      type="file"
+                      accept="image/jpeg"
+                      name="icon"
+                      (change)="onIconChanged($event.target.files)"
+                      *ngIf="edit"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="icon" class="text-left"
+                    >Immagine (Max. 1MB)</nz-form-label
+                  >
+                  <nz-form-control>
+                    <nz-avatar
+                      [nzShape]="'square'"
+                      [nzSize]="64"
+                      [nzText]="'Image'"
+                      [nzSrc]="sector.imagePath"
+                    ></nz-avatar>
+                    <input
+                      nz-button
+                      type="file"
+                      accept="image/jpeg"
+                      name="image"
+                      (change)="onImageChanged($event.target.files)"
+                      *ngIf="edit"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+      
+                <nz-form-item>
+                  <nz-form-control class="item-actions-container">
+                    <a
+                      nz-button
+                      nzType="default"
+                      [routerLink]="'/segnalame/settings/institutes/edit/' + institute.id"
+                      class="btn btn-default px-5"
+                      >Indietro</a
+                    >
+      
+                    <button
+                      nz-button
+                      [nzLoading]="isLoading"
+                      type="submit"
+                      nzType="default"
+                      class="btn btn-success px-5"
+                      [disabled]="validateForm.invalid"
+                      *ngIf="edit"
+                    >
+                      Salva
+                    </button>
+                  </nz-form-control>
+                </nz-form-item>
+              </form>
+        </nz-tab>
+
+        <nz-tab [nzTitle]="'Sottocategorie'" [nzDisabled]="isNew">
+            <app-institute-subsectors [institute]="institute" [sector]="sector" [edit]="edit" *ngIf="sector?.id && !isNew"></app-institute-subsectors>
+        </nz-tab>
+
+        <nz-tab [nzTitle]="'Utenti'" [nzDisabled]="isNew">
+            <app-institute-users [sector]="sector" [edit]="edit" *ngIf="sector?.id && !isNew"></app-institute-users>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+</div>

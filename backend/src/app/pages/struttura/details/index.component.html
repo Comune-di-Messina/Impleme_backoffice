@@ -1,0 +1,201 @@
+<div class="row">
+  <div class="col-lg-12">
+    <nz-alert *ngIf="infoBase.blocked"
+              class="mb-3"
+              nzType="warning"
+              nzMessage="Attenzione!"
+              nzDescription="Le prenotazioni per questa sala sono state temporaneamente sospese dall'amministratore del servizio."
+              nzShowIcon
+    ></nz-alert>
+    <h2>
+      Dettaglio della struttura &#34;{{ this.room.nome }}&#34;
+    </h2>
+    <p>Stai consultando i dettagli delle sala {{ this.room.nome }}
+    <nz-tabset nzType="card" nzSelectedIndex="0" #dati>
+      <nz-tab nzTitle="Informazioni di base">
+        <div class="row p-3">
+          <div class="col-2 h6">ID Struttura</div>
+          <div class="col-10 h5 strong">{{ infoBase.id }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Comune</div>
+          <div class="col-10 h5 strong">{{ infoBase.comune }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Categoria</div>
+          <div class="col-10 h5 strong">{{ infoBase.categoria }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Tipo struttura</div>
+          <div class="col-10 h5 strong">{{ infoBase.tipoStruttura }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Capienza</div>
+          <div class="col-10 h5 strong">{{ infoBase.capienza }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Giorni anticipo</div>
+          <div class="col-10 h5 strong">{{ infoBase.giorniAnticipo }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Catering in struttura</div>
+          <div class="col-10 h5 strong">{{ infoBase.catering ? 'Consentito' : 'Non consentito' }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Strutture tecniche di terze parti</div>
+          <div class="col-10 h5 strong">{{ infoBase.terzeParti ? 'Consentite' : 'Non consentite' }}</div>
+        </div>
+        <div class="row p-3">
+          <div class="col-2 h6">Prenotazioni bloccate?</div>
+          <div class="col-10 h5 strong">{{ infoBase.blocked ? 'Prenotazioni bloccate' : 'Prenotazioni consentite' }}</div>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="Aperture">
+        <ng-container>
+          <nz-table
+            #tableAperture
+            [nzFrontPagination]=false
+            [nzData]="aperture"
+          >
+            <thead>
+            <tr>
+              <th>Giorno della settimana</th>
+              <th>Orario inizio</th>
+              <th>Orario fine</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let apertura of tableAperture.data">
+              <td>
+                {{ apertura.giorno }}
+              </td>
+              <td>
+                {{ apertura.oraDa }}
+              </td>
+              <td>
+                {{ apertura.oraA }}
+              </td>
+            </tr>
+            </tbody>
+          </nz-table>
+        </ng-container>
+      </nz-tab>
+      <nz-tab nzTitle="Eventi e tariffe">
+        <nz-table #tableTariffario
+          [nzFrontPagination]=false
+          [nzData]="tariffario"
+        >
+          <thead>
+            <tr>
+              <th>Evento</th>
+              <th>Descrizione</th>
+              <th>Costo orario</th>
+              <th>Prenotazione giornaliera</th>
+              <th>Costo giornaliero</th>
+              <th>Prenotazione settimanale</th>
+              <th>Costo settimanale</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let riga of tableTariffario.data">
+            <tr>
+              <td>{{ riga.evento }}</td>
+              <td>{{ riga.note }}</td>
+              <td>{{ formatterEuro(riga.costoOrario) }}</td>
+              <td>{{ riga.flagInteraGiornata ? 'Consentita' : 'Non cons.' }}</td>
+              <td>{{ formatterEuro(riga.costoInteraGiornata) }}</td>
+              <td>{{ riga.flagInteraSettimana ? 'Consentita' : 'Non cons.' }}</td>
+              <td>{{ formatterEuro(riga.costoSettimanale) }}</td>
+              <td>
+                <button nz-button nzType="primary"
+                        (click)="toggleCostiFasce(riga.id)">
+                  Vedi tariffe puntuali
+                  <i class="fas fa-chevron-down ml-1"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="riga.showCostiFasce">
+              <td colspan="8" *ngIf="riga.flagInteraGiornata||riga.flagInteraSettimana">
+                <span class="h6">
+                  <i nz-icon nzType="info-circle"></i>
+                  Niente da mostrare in quanto la possibilit&agrave; di prenotare un'intera giornata o un'intera settimana genera le fasce automaticamente.
+                </span>
+              </td>
+              <td colspan="8" *ngIf="!riga.flagInteraGiornata&&!riga.flagInteraSettimana">
+                <div *ngFor="let costoFascia of getCostoFascia(riga.id)">
+                  <div class="row mt-2">
+                    <div class="col-12">
+                      <button nz-button nzType="default"
+                              (click)="toggleFasce(riga.id, costoFascia.giorno)">
+                        Espandi costi fasce per il giorno: {{ costoFascia.giorno }}
+                        <i class="fas fa-chevron-down ml-1"></i>
+                      </button>
+                      <nz-table *ngIf="costoFascia.showFasce"  #tableCostoFascia [nzData]="costoFascia.fasce">
+                        <thead>
+                        <tr>
+                          <th>Dalle ore</th>
+                          <th>Alle ore</th>
+                          <th>Costo fascia</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let costo of tableCostoFascia.data">
+                          <td>{{ costo.oraDa }}</td>
+                          <td>{{ costo.oraA }}</td>
+                          <td>{{ costo.costoFascia }}</td>
+                        </tr>
+                        </tbody>
+                      </nz-table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Accessori e servizi">
+        <nz-table #tableServizi [nzData]="servizi">
+          <thead>
+            <tr>
+              <th>Servizio</th>
+              <th>Codice</th>
+              <th>Importo</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let servizio of tableServizi.data">
+              <td>{{ servizio.descrizione }}</td>
+              <td>{{ servizio.codice }}</td>
+              <td>{{ formatterEuro(servizio.importo) }}</td>
+              <td>{{ servizio.note }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Riserve">
+        <nz-table #tableRiserve [nzData]="riserve">
+          <thead>
+          <tr>
+            <th>Dal giorno</th>
+            <th>Al giorno</th>
+            <th>Dalle ore</th>
+            <th>Alle ore</th>
+            <th>Motivo</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let chiusura of tableRiserve.data">
+              <td>{{ chiusura.giornoDa }}</td>
+              <td>{{ chiusura.giornoA }}</td>
+              <td>{{ chiusura.oraDa }}</td>
+              <td>{{ chiusura.oraA }}</td>
+              <td>{{ chiusura.motivo }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

@@ -1,0 +1,177 @@
+<div id="reservation-page">
+  <div class="row mb-4">
+    <div class="col-12">
+      <a nz-button nzType="default" [routerLink]="'/passi-carrabili/casefiles/assignee'"
+        ><i nz-icon nzType="left"></i> Indietro</a
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="title-container mb-4">
+        <h2 class="mb-0">Visualizza richiesta</h2>
+        <!-- <p class="mb-0">Sottotitolo</p> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="main-details-card-container mb-3">
+        <nz-card [nzTitle]="'Richiesta'" [nzExtra]="extraTemplate">
+          <div class="detail mb-4">
+            <p class="mb-2" *ngIf="pratica.idCaseFile">
+              ID: <strong>{{ pratica.idCaseFile | reservationId }}</strong>
+            </p>
+            <p class="mb-2" *ngIf="institute">
+              Ente: <strong>{{ institute.descrizione }}</strong>
+            </p>
+            <p class="mb-2" *ngIf="tipologia">
+              Tipologia: <strong>{{ tipologia.descrizione }}</strong>
+            </p>
+            <p class="mb-2" *ngIf="pratica.causale">
+              Causale: <strong>{{ pratica.causale }}</strong>
+            </p>
+            <p class="mb-2" *ngIf="pratica.importo">
+              Importo: <strong>{{ pratica.importo | currency: 'EUR' }}</strong>
+            </p>
+          </div>
+
+          <div class="textarea-container">
+            <textarea nz-input rows="6" placeholder="Note" [readonly]="true">{{
+              pratica.note
+            }}</textarea>
+          </div>
+        </nz-card>
+        <ng-template #extraTemplate>
+          <label>Stato:&nbsp;</label>
+          <nz-tag [nzColor]="getActiveStatusColor">{{ getActiveStatus }}</nz-tag>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="side-card-container mb-3" *ngIf="pratica.richiedente">
+        <nz-card
+          nzTitle="Richiedente"
+          class="actions-side-container user-details-container"
+          [nzExtra]="userIcon"
+        >
+          <ul class="user-details">
+            <li>
+              <label>Nome:</label>
+              <span>{{ pratica.richiedente.name }} {{ pratica.richiedente.surname }}</span>
+            </li>
+            <li>
+              <label>Cod.fiscale:</label>
+              <span>{{ pratica.richiedente.codiFisc }}</span>
+            </li>
+            <li *ngIf="pratica.richiedente.ragioneSociale">
+              <label>Ragione sociale:</label>
+              <span>{{ pratica.richiedente.ragioneSociale }}</span>
+            </li>
+            <li *ngIf="pratica.richiedente.piva">
+              <label>P.IVA:</label>
+              <span>{{ pratica.richiedente.piva }}</span>
+            </li>
+            <li>
+              <label>Telefono:</label>
+              <span>{{ pratica.richiedente.telephoneNumber }}</span>
+            </li>
+            <li>
+              <label>Email:</label>
+              <span>{{ pratica.richiedente.email }}</span>
+            </li>
+            <li>
+              <label>Indirizzo:</label>
+              <span>{{ getIndirizzo }}</span>
+            </li>
+          </ul>
+        </nz-card>
+      </div>
+    </div>
+
+    <div class="col-md-4" *ngIf="praticaAssignee">
+      <nz-card nzTitle="Azioni">
+        <form nz-form [formGroup]="validateForm">
+          <div *ngFor="let formValue of formValues.values; let i = index">
+            <nz-form-item *ngIf="formValue.type === 'select'">
+              <nz-form-label
+                [nzRequired]="formValue.required"
+                [nzSm]="24"
+                [nzXs]="24"
+                [nzFor]="formValue.name"
+                class="text-left"
+                >{{ formValue.label }}
+              </nz-form-label>
+              <nz-form-control [nzSm]="24" [nzXs]="24">
+                <nz-select [formControlName]="formValue.name" [required]="formValue.required">
+                  <nz-option
+                    *ngFor="let enum of formValue.enums; let idx = index"
+                    [nzValue]="enum"
+                    [nzLabel]="enum"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="formValue.type === 'string'">
+              <nz-form-label
+                [nzRequired]="formValue.required"
+                [nzSm]="24"
+                [nzXs]="24"
+                [nzFor]="formValue.name"
+                class="text-left"
+                >{{ formValue.label }}
+              </nz-form-label>
+              <nz-form-control [nzSm]="24" [nzXs]="24">
+                <textarea
+                  nz-input
+                  [formControlName]="formValue.name"
+                  rows="4"
+                  placeholder="Inserisci il testo..."
+                ></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </form>
+
+        <button
+          nz-button
+          nzType="success"
+          class="mr-3 mb-3 mt-1 btn btn-success"
+          (click)="submitForm()"
+          [disabled]="!validateForm.valid"
+        >
+          Salva
+        </button>
+      </nz-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <nz-card nzTitle="Allegati" [nzExtra]="fileIcon">
+        <div *ngFor="let document of pratica.attachments">
+          <div nz-row class="mt-1" >
+            <span nz-col nzSpan="24">Scarica <strong>{{document.description }}</strong>: <button nz-button nzType="primary" [nzSize]="16" (click)="onDocumentClick(document)">{{ document.fileName.length > 15 ? document.fileName.substring(0, 15)+'...': document.fileName}}<i nz-icon nzType="download"></i></button></span>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</div>
+
+<ng-template #userIcon>
+  <nz-avatar [nzSize]="32" nzIcon="user"></nz-avatar>
+</ng-template>
+<ng-template #infoCirleIcon>
+  <nz-avatar [nzSize]="32" nzIcon="info-circle"></nz-avatar>
+</ng-template>
+<ng-template #formIcon>
+  <nz-avatar [nzSize]="32" nzIcon="form"></nz-avatar>
+</ng-template>
+<ng-template #fileIcon>
+  <nz-avatar [nzSize]="32" nzIcon="file-pdf"></nz-avatar>
+</ng-template>

@@ -1,0 +1,243 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">Prenotazioni lavorate</h2>
+        <p>Visualizza tutte le prenotazioni che sono state lavorate.</p>
+        <p class="mb-2">
+          <button nz-button nzType="default" (click)="resetSearch()"><i nz-icon nzType="undo" nzTheme="outline"></i> Reset filtri</button>
+        </p>
+      <!-- </div>
+      <div class="card-body" nzAutoHeightDiv> -->
+        <nz-table
+          #nzTable
+          nzShowPagination
+          nzShowSizeChanger
+          [nzPageSize]="10"
+          [nzScroll]="{ y: scrollSize }"
+          [nzData]="search()"
+          [nzLoading]="stateLoading"
+        >
+          <thead>
+            <tr>
+              <th nzCustomFilter>
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.stato"
+                  [nzActive]="searchForm.stato"
+                  [nzDropdownMenu]="menuSearchStato">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Stato
+              </th>
+              <th [nzSortFn]="sortNumeroPratica"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  nzCustomFilter>
+                Numero pratica
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.numeroPratica"
+                  [nzActive]="searchForm.numeroPratica?.length"
+                  [nzDropdownMenu]="menuSearchNumeroPratica">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+              </th>
+              <th [nzSortFn]="sortByDataPrenotazione"
+                  nzCustomFilter>
+                <nz-filter-trigger [nzActive]="searchForm.dataPrenotazioneRange.length"
+                                   [(nzVisible)]="searchFiltersVisible.dataPrenotazioneRange"
+                                   [nzDropdownMenu]="menuDataPrenotazioneRange">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Data pren.
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">
+                Tit. evento
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">
+                Desc. evento
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null"
+                  nzCustomFilter>
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.ente"
+                  [nzActive]="searchForm.ente?.length > 0"
+                  [nzDropdownMenu]="menuSearchInstitute">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Ente
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null"
+                  nzCustomFilter>
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.roomId"
+                  [nzActive]="searchForm.roomId?.length > 0"
+                  [nzDropdownMenu]="menuSearchRoom">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Sala
+              </th>
+              <th [nzSortFn]="sortByDataPrenotazione"
+                  key="giornoDa"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null"
+                  nzCustomFilter>
+                <nz-filter-trigger [nzActive]="searchForm.giornoDaRange.length" [(nzVisible)]="searchFiltersVisible.giornoDaRange" [nzDropdownMenu]="menuGiornoDaRange">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Giorno Da
+              </th>
+              <th [nzSortFn]="sortByDataPrenotazione"
+                  key="giornoA"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null"
+                  nzCustomFilter>
+                <nz-filter-trigger [nzActive]="searchForm.giornoARange.length" [(nzVisible)]="searchFiltersVisible.giornoARange" [nzDropdownMenu]="menuGiornoARange">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Giorno A
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Ora Da</th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Ora A</th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Importo</th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Importo servizi</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let roomBooking of nzTable.data">
+              <td><nz-tag [nzColor]="getStatusColor(roomBooking.stato)">{{ getStatoName(roomBooking.stato) }}</nz-tag></td>
+              <td>{{ roomBooking.numeroPratica }}</td>
+              <td>{{ getDateFormat(roomBooking.dataPrenotazione) }}</td>
+              <td>{{ roomBooking.titoloEvento }}</td>
+              <td>{{ roomBooking.descrizioneEvento }}</td>
+              <td>{{ getEnteDescrizione(roomBooking.ente) }}</td>
+              <td>{{ getRoomNome(roomBooking.roomId) }}</td>
+              <td>{{ getDateFormat(roomBooking.giornoDa) }}</td>
+              <td>{{ getDateFormat(roomBooking.giornoA) }}</td>
+              <td>{{ roomBooking.oraDa }}</td>
+              <td>{{ roomBooking.oraA }}</td>
+              <td>{{ formatCurrency(roomBooking.importo) }}</td>
+              <td>{{ formatCurrency(roomBooking.importoServizi) }}</td>
+              <td>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Dettaglio'"
+                  class="mr-3 btn btn-outline-primary"
+                  (click)="onViewModel(roomBooking)"
+                >
+                  <i nz-icon nzType="eye"></i>
+                </button>
+                <button
+                  *ngIf="revocabile(roomBooking)"
+                  nz-button
+                  [nzSize]="12"
+                  nzType="danger"
+                  class="mr-3 mb-3"
+                  (click)="onDeleteModel(roomBooking)"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <nz-dropdown-menu #menuSearchStato="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <nz-select name="institute" nzAllowClear [(ngModel)]="searchForm.stato">
+                <nz-option [nzValue]="stato.id" [nzLabel]="stato.stato" *ngFor="let stato of getStati()"></nz-option>
+              </nz-select>
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('stato')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuSearchNumeroPratica="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Cerca pratica" [(ngModel)]="searchForm.numeroPratica" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('numeroPratica')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuSearchInstitute="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <nz-select name="institute" nzAllowClear [(ngModel)]="searchForm.ente">
+                <nz-option [nzValue]="institute.codice" [nzLabel]="institute.descrizione" *ngFor="let institute of getEnti()"></nz-option>
+              </nz-select>
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('ente')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuSearchRoom="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <nz-select name="room" nzAllowClear [(ngModel)]="searchForm.roomId">
+                <nz-option [nzValue]="room.id" [nzLabel]="room.nome" *ngFor="let room of getRooms()"></nz-option>
+              </nz-select>
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('roomId')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuDataPrenotazioneRange="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <div class="mb-2">
+                <nz-range-picker  [(ngModel)]="searchForm.dataPrenotazioneRange" (ngModelChange)="onDataPrenotazioneRangeChange($event)"></nz-range-picker>
+              </div>
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('dataPrenotazioneRange')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuGiornoDaRange="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <div class="mb-2">
+                <nz-range-picker  [(ngModel)]="searchForm.giornoDaRange" (ngModelChange)="onGiornoDaRangeChange($event)"></nz-range-picker>
+              </div>
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('giornoDaRange')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+      <nz-dropdown-menu #menuGiornoARange="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <div class="mb-2">
+              <nz-range-picker  [(ngModel)]="searchForm.giornoARange" (ngModelChange)="onGiornoARangeChange($event)"></nz-range-picker>
+            </div>
+            <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+              Cerca
+            </button>
+            <button nz-button nzSize="small" (click)="resetSearch('giornoARange')">Reset</button>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

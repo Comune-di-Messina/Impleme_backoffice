@@ -1,0 +1,112 @@
+<div class="row">
+  <div class="col-12 mb-4">
+    <nz-alert
+      nzType="error"
+      nzMessage="Attenzione"
+      [nzDescription]="errorMessage"
+      nzShowIcon
+      *ngIf="errorMessage"
+    >
+    </nz-alert>
+    <nz-alert
+      nzType="success"
+      nzMessage="Operazione completata"
+      [nzDescription]="successMessage"
+      nzShowIcon
+      nzCloseText="Chiudi"
+      (nzOnClose)="(onAlertClose)"
+      *ngIf="successMessage"
+    >
+    </nz-alert>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-lg-12">
+    <h2 class="mb-0">Lista tipologie pratiche</h2>
+    <p>Visualizza tutte le tipologie di pratiche</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <button
+      nz-button
+      nzType="success"
+      class="mr-3 mb-3 mt-1 btn btn-info"
+      (click)="onCreateModel()"
+      *ngIf="checkRoute('passicarrabili/types/create')"
+    >
+      Crea nuova tipologia
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <nz-table
+      [nzData]="tipologie"
+      [nzShowPagination]="false"
+      [nzLoading]="isLoadingModelList"
+      class="kit__utils__table"
+    >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Codice</th>
+          <th>Nome</th>
+          <th>Descrizione</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of tipologie">
+          <td>{{ m.id }}</td>
+          <td>
+            <nz-avatar
+              [nzShape]="'square'"
+              [nzSize]="30"
+              [nzText]="'Image'"
+              [nzSrc]="'data:image/jpeg;base64,' + m.img"
+              *ngIf="m.img"
+            ></nz-avatar>
+          </td>
+          <td>{{ m.codice }}</td>
+          <td>{{ m.nome }}</td>
+          <td>{{ m.descrizione }}</td>
+          <td>
+            <a
+              nz-tooltip
+              [nzTooltipTitle]="'Visualizza'"
+              class="mr-3 btn btn-outline-primary"
+              [routerLink]="'/passi-carrabili/types/view/' + m.id"
+              *ngIf="!checkRoute('passicarrabili/types/create')"
+            >
+              <i nz-icon nzType="eye"></i>
+            </a>
+
+            <a
+              nz-tooltip
+              [nzTooltipTitle]="'Modifica'"
+              class="mr-3 btn btn-outline-primary"
+              [routerLink]="'/passi-carrabili/types/edit/' + m.id"
+              *ngIf="checkRoute('passicarrabili/types/create')"
+            >
+              <i nz-icon nzType="edit"></i>
+            </a>
+
+            <button
+              nz-tooltip
+              [nzTooltipTitle]="'Elimina'"
+              class="mr-3 btn btn-danger"
+              (click)="onDeleteModel(m)"
+              *ngIf="checkRoute('passicarrabili/types/create')"
+            >
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<form nz-form [formGroup]="validateForm">
+  <bsm-ui-form-item-select formControlName="evaluation" required label="Valore" [options]="evaluationOptions" #azioni>
+  </bsm-ui-form-item-select>
+
+  <bsm-ui-form-item-input *ngIf="validateForm.controls['evaluation'].value == 'DA PAGARE'" formControlName="amount" [required]=" validateForm.controls['evaluation'].value == 'DA PAGARE' " label="Importo" placeholder="Inserisci importo...">
+  </bsm-ui-form-item-input>
+
+  <bsm-ui-form-item-text formControlName="message" label="Messaggio" placeholder="Inserisci il messaggio...">
+  </bsm-ui-form-item-text>
+</form>

@@ -1,0 +1,25 @@
+:host {
+  .item-actions-container {
+    .btn {
+      margin-right: 5px;
+
+      &:last-child {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+:host::ng-deep {
+  .table-icon {
+    max-width: 40px;
+  }
+
+  table {
+    tbody {
+      tr {
+        background-color: #fff;
+      }
+    }
+  }
+}

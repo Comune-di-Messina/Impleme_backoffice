@@ -1,0 +1,135 @@
+<div class="row mb-4">
+    <div class="col-lg-12">
+      <h2 class="mb-0">Prenotazioni</h2>
+      
+    </div>
+  </div>
+  
+  <div class="row">
+      <div class="col-lg-12">
+          <p class="mb-2">
+            <button nz-button nzType="default" (click)="resetSearch()"><i nz-icon nzType="undo" nzTheme="outline"></i> Reset filtri</button>
+          </p>
+  
+          <div class="table-container">
+              <nz-table
+              #nzTable
+              nzShowPagination
+              nzShowSizeChanger
+              [nzData]="itemsInPage"
+              (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+              [nzPageIndex]="pageIndex"
+              (nzPageIndexChange)="onCurrentPageChange($event)"
+              class="kit__utils__table"
+            >
+              <thead>
+                <tr>
+                  <th nzCustomFilter [nzWidth]="'15%'" [nzSortOrder]="'descend'" [nzSortFn]="sortByDate" [nzSortDirections]="['ascend', 'descend']">
+                    Data
+                    <nz-filter-trigger [nzActive]="searchForm.dateRange" [(nzVisible)]="searchFiltersVisible.dateRange" [nzDropdownMenu]="menuDateRange">
+                      <i nz-icon nzType="search"></i>
+                    </nz-filter-trigger>
+                  </th>
+                  <th nzCustomFilter [nzWidth]="'15%'" [nzSortOrder]="" [nzSortFn]="sortById" [nzSortDirections]="['ascend', 'descend', '']">
+                    ID
+                    <nz-filter-trigger [(nzVisible)]="searchFiltersVisible.id" [nzActive]="searchForm.id?.length > 0" [nzDropdownMenu]="menuSearchId">
+                      <i nz-icon nzType="search"></i>
+                    </nz-filter-trigger>
+                  </th>
+                  <th>Comune</th>
+                  <th>
+                    Ufficio
+                    <nz-filter-trigger [(nzVisible)]="searchFiltersVisible.office" [nzActive]="searchForm.office?.length > 0" [nzDropdownMenu]="menuSearchOffice">
+                      <i nz-icon nzType="search"></i>
+                    </nz-filter-trigger>
+                  </th>
+                  <th>
+                    Stato
+                    <nz-filter-trigger [(nzVisible)]="searchFiltersVisible.status" [nzActive]="searchForm.status?.length > 0" [nzDropdownMenu]="menuSearchStatus">
+                      <i nz-icon nzType="search"></i>
+                    </nz-filter-trigger>
+                  </th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of nzTable.data; let key = index;">
+                  <td>{{ getDateTime(data) }}</td>
+                  <td>{{ data.id | reservationId }}</td>
+                  <td>{{ getInstituteByCode(data.office?.municipalityId)?.descrizione }}</td>
+                  <td>{{ data.office.name }}</td>
+                  <td><nz-tag [nzColor]="getStatusColor(data)">{{ getActiveStatus(data) }}</nz-tag></td>
+                  <td>
+                    <app-acl-route route="prenotaUfficio">
+                      <a
+                      nz-tooltip
+                      [nzTooltipTitle]="'Visualizza'"
+                      class="mr-3 btn btn-outline-primary"
+                      [routerLink]="'/prenota-ufficio/reservations/view/' + data.id"
+                      >
+                          <i nz-icon nzType="eye"></i>
+                      </a>
+                    </app-acl-route>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+
+            <nz-dropdown-menu #menuDateRange="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <div class="mb-2">
+                    <nz-range-picker  [(ngModel)]="searchForm.dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+                  </div>
+                  
+                  <button nz-button nzSize="small" nzType="primary" (click)="getReservations()" class="search-button">
+                    Cerca
+                  </button>
+                  <button nz-button nzSize="small" (click)="resetSearchByDate()">Reset</button>
+                </div>
+              </div>
+            </nz-dropdown-menu>
+
+            <nz-dropdown-menu #menuSearchId="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <input type="text" nz-input placeholder="Cerca ID" [(ngModel)]="searchForm.id" />
+                  <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                    Cerca
+                  </button>
+                  <button nz-button nzSize="small" (click)="resetSearch('id')">Reset</button>
+                </div>
+              </div>
+            </nz-dropdown-menu>
+
+            <nz-dropdown-menu #menuSearchOffice="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <nz-select name="office" nzAllowClear [(ngModel)]="searchForm.office">
+                    <nz-option [nzValue]="office.value" [nzLabel]="office.text" *ngFor="let office of (officesFilters | orderBy:'asc':'text')"></nz-option>
+                  </nz-select>
+                  <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                    Cerca
+                  </button>
+                  <button nz-button nzSize="small" (click)="resetSearch('office')">Reset</button>
+                </div>
+              </div>
+            </nz-dropdown-menu>
+
+            <nz-dropdown-menu #menuSearchStatus="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <nz-select name="status" nzAllowClear [(ngModel)]="searchForm.status">
+                    <nz-option [nzValue]="status.value" [nzLabel]="status.text" *ngFor="let status of (statusesFilters | orderBy:'asc':'text')"></nz-option>
+                  </nz-select>
+                  <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                    Cerca
+                  </button>
+                  <button nz-button nzSize="small" (click)="resetSearch('status')">Reset</button>
+                </div>
+              </div>
+            </nz-dropdown-menu>
+          </div>
+      </div>
+  </div>
+  

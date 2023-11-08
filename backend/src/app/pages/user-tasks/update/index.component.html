@@ -1,0 +1,32 @@
+<div class="row">
+
+  <div class="col-lg-12">
+    <div>
+      <nz-alert nzType="error" nzMessage="Attenzione" [nzDescription]="saveFormError" nzShowIcon *ngIf="saveFormError">
+      </nz-alert>
+      <nz-alert nzType="success" nzMessage="Operazione completata con successo"
+        nzDescription="Verrai reindirizzato alla lista delle prenotazioni prese in carico" nzShowIcon
+        *ngIf="saveFormSuccess">
+      </nz-alert>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+        <h2 class=" mb-0">
+          Modifica prenotazione sala
+        </h2>
+  </div>
+</div>
+<div nz-row [nzGutter]="24">
+  <div nz-col nzSpan="16">
+    <bsm-prenotazione-sala-dettaglio [roomBooking]="roomBooking"></bsm-prenotazione-sala-dettaglio>
+  </div>
+  <div nz-col nzSpan="8">
+    <nz-card nzTitle="Azioni">
+      <user-tasks-form (onSaveFormError)="onSaveFormError($event)" [validateForm]="validateForm"></user-tasks-form>
+      <button nz-button nzType="success" class="mr-3 mb-3 mt-1 btn btn-success" (click)="submitForm()"
+              [disabled]="!validateForm.valid">Salva</button>
+    </nz-card>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<nz-form-item>
+    <nz-form-label [nzRequired]="required" [nzSm]="8" [nzXs]="24" nzFor="full-name" class="text-left">{{label}}</nz-form-label>
+    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="errorTip">
+        <nz-time-picker [(ngModel)]="value" (ngModelChange)="onChangeValue($event)"></nz-time-picker> 
+    </nz-form-control>
+</nz-form-item>

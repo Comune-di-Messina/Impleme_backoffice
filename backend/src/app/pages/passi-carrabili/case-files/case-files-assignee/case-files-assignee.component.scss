@@ -1,0 +1,24 @@
+.search-box {
+  min-width: 280px;
+  padding: 8px;
+
+  .ant-select {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  input {
+    width: 100%;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  button {
+    width: 90px;
+  }
+
+  .search-button {
+    margin-right: 8px;
+  }
+}

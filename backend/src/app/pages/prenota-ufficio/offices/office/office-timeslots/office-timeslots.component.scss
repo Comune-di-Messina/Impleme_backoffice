@@ -1,0 +1,33 @@
+:host {
+  .not-used {
+    color: transparent;
+  }
+
+  .timeslots-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .not-reservable {
+      opacity: 0.5;
+      color: #f5222e;
+    }
+  }
+
+  .ant-select {
+    display: block;
+    width: 100%;
+    min-width: 180px;
+  }
+
+  .delete-timeslot-icon {
+    font-size: 12px;
+    margin-right: 3px;
+    color: #f5222e;
+  }
+
+  .disable-timeslot-icon {
+    font-size: 12px;
+    margin-right: 3px;
+  }
+}

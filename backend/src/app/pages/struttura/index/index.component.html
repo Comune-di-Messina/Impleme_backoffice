@@ -1,0 +1,117 @@
+<div class="row">
+  <div class="col-12">
+    <nz-alert
+      nzType="error"
+      nzMessage="Attenzione"
+      [nzDescription]="errorMessage"
+      nzShowIcon
+      *ngIf="errorMessage"
+    >
+    </nz-alert>
+    <nz-alert
+      nzType="success"
+      nzMessage="Operazione completata"
+      [nzDescription]="successMessage"
+      nzShowIcon
+      *ngIf="successMessage"
+    >
+    </nz-alert>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">
+          Lista strutture
+        </h2>
+        <p>
+          Visualizza tutte le strutture
+        </p>
+        <button
+          nz-button
+          nzType="success"
+          class="mr-3 mb-3 mt-1 btn btn-info"
+          (click)="onCreateModel()"
+          *ngIf="getAclService().checkRoute('struttura/create')"
+        >
+          Crea
+        </button>
+      <!-- </div>
+      <div class="card-body"> -->
+        <nz-table
+          nzShowPagination
+          nzShowSizeChanger
+          [nzPageSize]="10"
+          [nzScroll]="{ y: scrollSize }"
+          (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+          [nzData]="rooms"
+          class="kit__utils__table"
+        >
+          <thead>
+            <tr>
+              <th
+                *ngFor="let column of listOfColumns"
+                [nzSortOrder]="column.sortOrder"
+                [nzSortFn]="column.sortFn"
+                [nzSortDirections]="column.sortDirections"
+                [nzFilterMultiple]="column.filterMultiple"
+                [nzFilters]="column.listOfFilter"
+                [nzFilterFn]="column.filterFn"
+              >
+                {{ column.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of roomsInPage">
+              <td>{{ m.nome }}</td>
+              <!-- <td>{{ getCategoryText(m) }}</td> -->
+              <td>{{ getEnteText(m.comune) }}</td>
+              <!-- <td>
+                <div *ngFor="let ap of m.aperture">
+                  {{ ap.giorno }} - dalle {{ ap.oraDa }} alle {{ ap.oraA }}
+                </div>
+              </td> -->
+              <!-- <td>
+                <div *ngFor="let s of m.servizi">
+                  {{ s.codice }} - {{ s.descrizione }} - {{ s.importo | currency: 'EUR' }}
+                </div>
+              </td> -->
+              <td>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Visualizza'"
+                  class="btn btn-outline-primary"
+                  (click)="onPreviewModel(m)"
+                  *ngIf="!getAclService().checkRoute('struttura/update')"
+                >
+                  <i nz-icon nzType="eye"></i>
+                </button>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Modifica'"
+                  class="btn btn-outline-primary mr-3"
+                  (click)="onUpdateModel(m)"
+                  *ngIf="getAclService().checkRoute('struttura/update')"
+                >
+                  <i nz-icon nzType="edit"></i>
+                </button>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Elimina'"
+                  class="btn btn-danger"
+                  (click)="onDeleteModel(m)"
+                  *ngIf="getAclService().checkRoute('struttura/update')"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

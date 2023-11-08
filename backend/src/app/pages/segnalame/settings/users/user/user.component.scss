@@ -1,0 +1,11 @@
+:host {
+  .item-actions-container {
+    .btn {
+      margin-right: 5px;
+
+      &:last-child {
+        margin-right: 5px;
+      }
+    }
+  }
+}

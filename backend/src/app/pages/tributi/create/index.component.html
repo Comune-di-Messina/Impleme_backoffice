@@ -1,0 +1,218 @@
+<div class="row mb-4">
+  <div class="col-lg-12">
+    <div>
+      <nz-alert
+        nzType="error"
+        nzMessage="Attenzione"
+        [nzDescription]="errorMessageTpl"
+        nzShowIcon
+        *ngIf="errorMessage"
+      >
+        <ng-template #errorMessageTpl><div [innerHTML]="errorMessage"></div></ng-template>
+      </nz-alert>
+      <nz-alert
+      nzType="success"
+      nzMessage="Tributo salvato con successo"
+      [nzDescription]="successMessage"
+      nzShowIcon
+      *ngIf="successMessage"
+    >
+    </nz-alert>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">
+          Crea tributo
+        </h2>
+        <p>
+          Inserisci un nuovo tributo
+        </p>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="full-name"
+                           class="text-left"
+                           nzRequired>
+              Nome tributo
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il nome tributo">
+              <input
+                required="true"
+                nz-input
+                formControlName="NomeTributo"
+                placeholder="Inserisci il nome tributo..."
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="anno"
+                           class="text-left"
+                           nzRequired>
+              Anno
+            </nz-form-label>
+            <nz-form-control [nzSm]="12"
+                             [nzXs]="24"
+                             nzErrorTip="Inserisci l'anno">
+              <nz-input-number formControlName="anno" [nzMin]="2000" [ngModel]="currentYear"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="giorniScadenza"
+                           class="text-left"
+                           nzRequired>
+              Giorni scadenza
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" 
+                             [nzXs]="24" 
+                             nzErrorTip="Inserisci i giorni della scadenza">
+              <nz-input-number formControlName="giorniScadenza" [nzMin]="0" [ngModel]="15"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="DataAttivazione"
+                           class="text-left"
+                           nzRequired>
+              Data attivazione
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" 
+                             [nzXs]="24" 
+                             nzErrorTip="Inserisci la data di attivazione del tributo">
+              <nz-date-picker
+                [nzShowTime]="{ nzFormat: 'HH:mm', nzMinuteStep: 30, nzSecondStep: 60 }"
+                nzFormat="dd/MM/yyyy HH:mm"
+                formControlName="DataAttivazione"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="pagaDirittiSegreteria"
+                           class="text-left"
+                           nzRequired>
+              Paga Diritti segereteria
+            </nz-form-label>
+            <nz-form-control
+              [nzSm]="12"
+              [nzXs]="24"
+              nzErrorTip="Specifica il paga diritto segreteria"
+            >
+              <nz-select name="select-validate" formControlName="pagaDirittiSegreteria">
+                <nz-option [nzValue]="true" nzLabel="Si"></nz-option>
+                <nz-option [nzValue]="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="DescrizioneTributo" class="text-left"
+              >Descrizione tributo
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la descrizione">
+              <textarea
+                nz-input
+                rows="5"
+                formControlName="DescrizioneTributo"
+                placeholder="Inserisci la descrizione..."
+              ></textarea>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="TipoTributo"
+                           class="text-left">
+              Tipo tributo
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il tipo di tributo">
+              <input
+                nz-input
+                formControlName="TipoTributo"
+                placeholder="Inserisci il tipo di tributo..."
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="sottotipo"
+                           class="text-left">
+              Sottotipo
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il sottotipo">
+              <input nz-input formControlName="sottotipo" placeholder="Inserisci il sottotipo..." />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="descrizioneRT" class="text-left"
+              >Descrizione RT</nz-form-label
+            >
+            <nz-form-control [nzSm]="12"
+                             [nzXs]="24"
+                             nzErrorTip="Inserisci la descrizione per il campo Ricevuta Telematica"
+            >
+              <textarea
+                nz-input
+                rows="5"
+                formControlName="descrizioneRT"
+                placeholder="Inserisci la descrizione per la ricevuta telematica..."
+              ></textarea>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="spontaneo" class="text-left"
+              >Spontaneo</nz-form-label
+            >
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica il flag spontaneo">
+              <nz-select name="select-validate" formControlName="spontaneo">
+                <nz-option [nzValue]="true" nzLabel="Si"></nz-option>
+                <nz-option [nzValue]="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4"
+                           [nzXs]="24"
+                           nzFor="validazione"
+                           class="text-left"
+                           nzRequired>
+              Validazione
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica il flag validazione">
+              <nz-select name="select-validate" formControlName="validazione">
+                <nz-option [nzValue]="true" nzLabel="Si"></nz-option>
+                <nz-option [nzValue]="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-control>
+              <button type="submit" class="btn btn-success px-5" [disabled]="validateForm.invalid">
+                Salva
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

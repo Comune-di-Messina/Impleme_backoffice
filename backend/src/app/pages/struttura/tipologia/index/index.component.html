@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">Lista tipologie strutture</h2>
+        <p>Visualizza tutte le tipologie di strutture</p>
+        <button nz-button nzType="success" class="mr-3 mb-3 mt-1 btn btn-info"  (click)="onCreateModel()" *ngIf="checkRoute('struttura/tipologia/create')">Crea</button>
+    </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+      <!-- </div>
+      <div class="card-body"> -->
+        <nz-table [nzData]="modelList" [nzShowPagination]="false" [nzLoading]="isLoadingModelList" class="kit__utils__table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tipo</th>
+              <th *ngIf="checkRoute('struttura/tipologia/create')">Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of modelList">
+              <td>{{m.id}}</td>
+              <td>{{m.tipo}}</td>
+              <td *ngIf="checkRoute('struttura/tipologia/create')">
+                <!--
+                <button nz-tooltip [nzTooltipTitle]="'Modifica'" class="mr-3 btn btn-outline-primary"  (click)="onUpdateModel(tributo)"><i nz-icon nzType="edit"></i></button>
+                -->
+                <button nz-tooltip [nzTooltipTitle]="'Elimina'" class="mr-3 btn btn-danger"  (click)="onDeleteModel(m)" *ngIf="checkRoute('struttura/tipologia/create')"><i nz-icon nzType="delete"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

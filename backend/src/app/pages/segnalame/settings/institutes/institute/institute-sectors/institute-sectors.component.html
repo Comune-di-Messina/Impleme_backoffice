@@ -1,0 +1,76 @@
+<button
+nz-button
+nzType="success"
+class="mr-3 mb-3 mt-1 btn btn-info"
+[routerLink]="'/segnalame/settings/institutes/edit/' + institute.id + '/sector/create'"
+*ngIf="edit"
+>
+Aggiungi categoria
+</button>
+
+<div class="table-container">
+  <nz-table
+    nzShowPagination
+    nzShowSizeChanger
+    [nzPageSize]="10"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+    class="kit__utils__table"
+    [nzData]="sectors"
+  >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of listOfColumns"
+          [nzSortOrder]="column.sortOrder"
+          [nzSortFn]="column.sortFn"
+          [nzSortDirections]="column.sortDirections"
+          [nzFilterMultiple]="column.filterMultiple"
+          [nzFilters]="column.listOfFilter"
+          [nzFilterFn]="column.filterFn"
+          [nzWidth]="column.width"
+        >
+          {{ column.name }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of itemsInPage">
+        <td><img class="table-icon" [src]="data.iconPath" alt="" *ngIf="data.iconPath" /></td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.description }}</td>
+        <td>{{ data.subtitle }}</td>
+        <td>{{ data.email }}</td>
+        <td><i class="fa fa-check" *ngIf="data.enabled"></i></td>
+        <td>
+          <a
+            nz-tooltip
+            [nzTooltipTitle]="'Visualizza'"
+            class="mr-3 btn btn-outline-primary"
+            [routerLink]="'/segnalame/settings/institutes/view/' + institute.id + '/sector/view/' + data.id"
+            *ngIf="!edit"
+          >
+            <i nz-icon nzType="eye"></i>
+          </a>
+          <a
+            nz-tooltip
+            [nzTooltipTitle]="'Modifica'"
+            class="mr-3 btn btn-outline-primary"
+            [routerLink]="'/segnalame/settings/institutes/edit/' + institute.id + '/sector/edit/' + data.id"
+            *ngIf="edit"
+          >
+            <i nz-icon nzType="edit"></i>
+          </a>
+          <button
+            nz-tooltip
+            [nzTooltipTitle]="'Elimina'"
+            class="mr-3 btn btn-danger"
+            (click)="onDeleteModel(data)"
+            *ngIf="edit"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

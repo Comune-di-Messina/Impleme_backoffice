@@ -1,0 +1,38 @@
+<div class="row mb-1">
+    <div class="col-lg-12">
+        <h2 class="mb-0" *ngIf="pageTitle">
+            {{ pageTitle }}
+        </h2>
+        <p *ngIf="pageSubtitle">
+            {{ pageSubtitle }}
+        </p>
+
+        <a nz-button nzType="default" class="mt-2" [routerLink]="'/prenota-ufficio/offices/municipality/' + municipalityId">
+            <i nz-icon nzType="left" nzTheme="outline"></i> Indietro
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-container mt-4">
+            <nz-tabset nzType="card">
+                <nz-tab [nzTitle]="'Dettagli'">
+                    <app-office-details [municipalityId]="municipalityId" [office]="office" (onOfficeCreated)="onCreateOffice($event)" (onOfficeChange)="onChangeOffice($event)" [isNew]="isNew"></app-office-details>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Orari'" *ngIf="!isNew">
+                    <app-office-timeslots [municipalityId]="municipalityId" [office]="office"></app-office-timeslots>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Aperture/Chiusure'" *ngIf="!isNew">
+                    <app-office-days [municipalityId]="municipalityId" [office]="office"></app-office-days>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Sportelli'" *ngIf="!isNew">
+                    <app-office-counters [municipalityId]="municipalityId" [office]="office"></app-office-counters>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div>

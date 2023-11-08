@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">
+          Lista attributi
+        </h2>
+        <p>
+          Visualizza tutti gli attributi del tributo
+        </p>
+        <button nz-button nzType="success" class="mr-3 mb-3"  (click)="onCreateAttributo()">Crea</button>
+      <!-- </div>
+      <div class="card-body"> -->
+        <nz-table [nzData]="attributoList" [nzShowPagination]="false" class="kit__utils__table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Campo</th>
+              <th>Tipo dato</th>
+              <th>Obbligatorio</th>
+              <th>Ripetibile</th>
+              <th>Editabile</th>
+              <th>Causale template</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let attributo of attributoList">
+              <td>{{attributo.id}}</td>
+              <td>{{attributo.campo }}</td>
+              <td>{{attributo.tipoDato}}</td>
+              <td>{{attributo.obbligatorio | boolean }}</td>
+              <td>{{attributo.ripetibile | boolean }}</td>
+              <td>{{attributo.editabile | boolean }}</td>
+              <td>{{attributo.causaleTemplate}}</td>
+              <td><button nz-button [nzSize]="size" nzType="danger" class="mr-3 mb-3"  (click)="onDeleteAttributo(attributo)"><i nz-icon nzType="delete"></i></button></td>
+            </tr>
+          </tbody>
+        </nz-table>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

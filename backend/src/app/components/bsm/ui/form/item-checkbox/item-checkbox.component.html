@@ -1,0 +1,6 @@
+<nz-form-item>
+    <nz-form-label [nzRequired]="required" [nzSm]="8" [nzXs]="24" nzFor="full-name" class="text-left">{{label}}</nz-form-label>
+    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Inserisci il campo">
+        <label nz-checkbox [(ngModel)]="checked" (nzCheckedChange)="onChangeCheckbox($event)">{{text}}</label>
+    </nz-form-control>
+</nz-form-item>

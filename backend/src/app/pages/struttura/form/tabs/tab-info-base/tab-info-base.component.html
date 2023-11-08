@@ -1,0 +1,81 @@
+<ng-container [formGroup]="validateForm">
+  <!--
+    {{validateForm.value | json}}
+    -->
+  <bsm-ui-form-item-select
+    formControlName="comune"
+    required
+    label="Comune cui appartiene la struttura"
+    [options]="comuneOptions"
+  >
+  </bsm-ui-form-item-select>
+
+  <bsm-ui-form-item-input
+    formControlName="id"
+    required
+    label="Identificativo della struttura"
+    placeholder="Viene qui visualizzato l'identificativo della struttura."
+    readonly
+  ></bsm-ui-form-item-input>
+
+  <bsm-ui-form-item-input
+    formControlName="nome"
+    required
+    label="Nome della struttura"
+    placeholder="Inserisci il nome della struttura..."
+  ></bsm-ui-form-item-input>
+
+  <bsm-ui-form-item-select
+    formControlName="categoria"
+    required
+    label="Categoria della struttura"
+    [options]="categoriaOptions"
+  >
+  </bsm-ui-form-item-select>
+
+  <bsm-ui-form-item-select
+    formControlName="tipoStruttura"
+    required
+    label="Tipologia della struttura"
+    [options]="tipologiaOptions"
+  >
+  </bsm-ui-form-item-select>
+
+  <bsm-ui-form-item-number formControlName="capienza" label="Capienza della struttura" required>
+  </bsm-ui-form-item-number>
+
+  <!-- <bsm-ui-form-item-input
+    formControlName="condizioniUtilizzo"
+    required
+    label="Condizioni di utilizzo della sala"
+    placeholder="Inserisci condizioni di utilizzo..."
+  >
+  </bsm-ui-form-item-input> -->
+
+  <bsm-ui-form-item-number
+    formControlName="giorniAnticipo"
+    label="Giorni di anticipo con cui prenotare la struttura"
+    disabled
+  >
+  </bsm-ui-form-item-number>
+
+  <bsm-ui-form-item-checkbox
+    formControlName="terzeParti"
+    text="Spunta questa voce per consentire a strutture tecniche di terze parti di gestire, ad esempio, l'impianto audio della struttura"
+    label="Consenti strutture tecniche di terze parti"
+  >
+  </bsm-ui-form-item-checkbox>
+
+  <bsm-ui-form-item-checkbox
+    formControlName="catering"
+    text="Spunta questa voce per consentire il servizio catering nella struttura"
+    label="Consenti servizio catering"
+  ></bsm-ui-form-item-checkbox>
+
+  <bsm-ui-form-item-checkbox
+    formControlName="blocked"
+    text="Spunta questa voce per indicare che la struttura non può essere prenotata"
+    label="Struttura non disponibile"
+  >
+  </bsm-ui-form-item-checkbox>
+</ng-container>

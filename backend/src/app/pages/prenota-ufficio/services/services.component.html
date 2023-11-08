@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="mb-0" *ngIf="pageTitle">
+            {{ pageTitle }}
+        </h2>
+        <p *ngIf="pageSubtitle">
+            {{ pageSubtitle }}
+        </p>
+
+        <div class="card-container mt-4">
+            <nz-tabset nzType="card">
+                <nz-tab [nzTitle]="'Servizi pubblici'">
+                    <app-public-services></app-public-services>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Tipologia'">
+                    <app-service-types></app-service-types>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div>

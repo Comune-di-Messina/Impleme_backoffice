@@ -1,0 +1,28 @@
+<ng-container [formGroup]="validateForm">
+    <nz-table #basicTable [nzData]="[].constructor(eventi.controls.length)" formArrayName="eventi">
+        <thead>
+            <tr>
+                <th>Descrizione</th>
+                <th>Evento</th>
+                <th *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">Elimina</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of eventi.controls; let i = index;" [formGroupName]="i">
+                <td>
+                    <input nz-input formControlName="descrizione" placeholder="Inserire la descrizione" />
+                </td>
+                <td>
+                    <input nz-input formControlName="evento" placeholder="Inserire l'evento" />
+                </td>
+                <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+                    <button nz-button nzType="default" nzDanger (click)="delEvento(i); $event.preventDefault()"><i nz-icon nzType="delete"
+                            nzTheme="outline"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+    <button nz-button class="mt-2" nzType="primary" (click)="addEvento(); $event.preventDefault()"><i nz-icon nzType="plus"></i>Aggiungi</button>
+
+</ng-container>

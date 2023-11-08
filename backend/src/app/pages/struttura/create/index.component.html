@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div
+      *ngIf="saveFormError">
+      <nz-alert
+        nzType="error"
+        nzMessage="Attenzione"
+        [nzDescription]="errorMessage"
+        nzShowIcon
+        *ngFor="let errorMessage of saveFormError"
+      >
+      </nz-alert>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">
+          Crea struttura
+        </h2>
+        <p>
+          Crea una nuova struttura
+        </p>
+        <button
+          nz-button
+          nzType="success"
+          class="mr-3 mb-3 mt-1 btn btn-success"
+          (click)="submitForm()"          
+        >
+          Salva
+        </button>
+      <!-- </div>
+      <div class="card-body"> -->
+        <struttura-form
+          #strutturaForm
+          (canSendForm)="canSendForm($event)"
+          (onSaveFormError)="onSaveFormError($event)"
+          (onSaveFormSuccess)="onSaveFormSuccess($event)"
+        ></struttura-form>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

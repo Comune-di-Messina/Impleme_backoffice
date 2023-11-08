@@ -1,0 +1,94 @@
+<div class="row">
+
+    <div class="col-lg-12">
+        <div>
+            <nz-alert nzType="error" nzMessage="Attenzione" [nzDescription]="errorSave" nzShowIcon *ngIf="errorSave">
+            </nz-alert>
+        </div>
+    </div>
+</div>
+<div class="row mb-1">
+    <div class="col-lg-12">
+        <!-- <div class="card">
+        <div class="card-header"> -->
+        <h2 class="mb-0" *ngIf="pageTitle">
+            {{ pageTitle }}
+        </h2>
+        <p *ngIf="pageSubtitle">
+            {{ pageSubtitle }}
+        </p>
+        <!-- </div>
+        <div class="card-body"> -->
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+                    <nz-form-item *ngIf="!isNew">
+                        <nz-form-label [nzRequired]="true" [nzSm]="4" [nzXs]="24" nzFor="name" class="text-left">Nome</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il nome">
+                            <input nz-input [value]="institute.name" placeholder="Inserisci il nome..." required [readonly]="true" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item *ngIf="isNew">
+                        <nz-form-label [nzRequired]="true" [nzSm]="4" [nzXs]="24" nzFor="user" class="text-left">Nome</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="passwordErrorTpl">
+                          <nz-select name="name" formControlName="name">
+                            <nz-option [nzValue]="name.id" [nzLabel]="name.value" *ngFor="let name of enabledNames"></nz-option>
+                          </nz-select>
+
+                          <ng-template #passwordErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                              Selezionare un nome
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('forbiddenName')">
+                              Il nome selezionato è già esistente
+                            </ng-container>
+                          </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="false" [nzSm]="4" [nzXs]="24" nzFor="email" class="text-left">Email</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci l'indirizzo email">
+                            <input nz-input formControlName="email" placeholder="Inserisci l'indirizzo email..." [readonly]="!edit" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="enabled" class="text-left">Attivato</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Attivato">
+                            <label nz-checkbox formControlName="enabled" [nzChecked]="institute.enabled" [nzDisabled]="!edit" [nzValue]="1">
+                            </label>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-control class="item-actions-container">
+                            <a routerLink="/segnalame/settings/institutes" class="btn btn-default px-5">Indietro</a>
+
+                            <button type="submit" class="btn btn-success px-5" [disabled]="validateForm.invalid" *ngIf="edit">
+                                Salva
+                            </button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isNew && institute?.id">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h3>Categorie</h3>
+
+                <div class="sectors-list">
+                    <app-institute-sectors [edit]="edit" [institute]="institute"></app-institute-sectors>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

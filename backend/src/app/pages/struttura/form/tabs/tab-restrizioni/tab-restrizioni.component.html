@@ -1,0 +1,44 @@
+<ng-container [formGroup]="validateForm">
+    <nz-table #basicTable [nzData]="[].constructor(riserve.controls.length)" formArrayName="riserve">
+        <thead>
+            <tr>
+                <th>Motivo</th>
+                <th>Data inizio</th>
+                <th>Orario inizio</th>
+                <th>Data fine</th>
+                <th>Orario fine</th>
+                <th>Note</th>
+                <th *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">Elimina</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of riserve.controls; let i = index;" [formGroupName]="i">
+                <td>
+                    <input nz-input formControlName="motivo" placeholder="Inserire il motivo" />
+                </td>
+                <td>
+                    <nz-date-picker formControlName="giornoDa" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                </td>
+                <td>
+                    <nz-time-picker formControlName="oraDa" [nzMinuteStep]="30" [nzSecondStep]="60"></nz-time-picker>
+                </td>
+                <td>
+                    <nz-date-picker formControlName="giornoA" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                </td>
+                <td>
+                    <nz-time-picker formControlName="oraA" [nzMinuteStep]="30" [nzSecondStep]="60"></nz-time-picker>
+                </td>
+                <td>
+                    <input nz-input formControlName="note" placeholder="Inserire le note" />
+                </td>
+                <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+                    <button nz-button nzType="default" nzDanger (click)="delItem(i); $event.preventDefault()"><i nz-icon nzType="delete"
+                            nzTheme="outline"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+    <button nz-button class="mt-2" nzType="primary" (click)="addItem(); $event.preventDefault()"><i nz-icon nzType="plus"></i>Aggiungi</button>
+
+</ng-container>

@@ -1,0 +1,61 @@
+<ng-container [formGroup]="tariffarioItem">
+  <nz-table
+    [nzData]="[].constructor(costoFasce.controls.length)"
+    formArrayName="costoFasce"
+  >
+    <thead>
+      <tr>
+        <th></th>
+        <th>Giorno</th>
+        <th *ngIf="checkRoute('struttura/create') || checkRoute('struttura/update')">Elimina</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of costoFasce.controls; let i = index" [formGroupName]="i">
+        <tr>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)">Fasce</td>
+          <td>
+            <nz-select formControlName="giorno" [nzOptions]="giorniDisponibili(i)" style="width:100%">
+            </nz-select>
+          </td>
+          <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+            <button
+              nz-button
+              nzType="default"
+              nzDanger
+              (click)="delItem(i); $event.preventDefault()"
+            >
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+          </td>
+        </tr>
+        <tr [nzExpand]="expandSet.has(i)">
+          <tabella-costo-fascia [costoFasciaItem]="costoFasce.controls[i]"></tabella-costo-fascia>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+
+  <button
+    nz-button class="mt-2"
+    nzType="primary"
+    (click)="addItem(); $event.preventDefault()"
+    *ngIf="(checkRoute('struttura/create') ||  checkRoute('struttura/update')) && giorniDisponibili(-1).length"
+  >
+    <i nz-icon nzType="plus"></i>Aggiungi tariffa per giorno
+  </button>
+
+  <button
+    nz-button
+    class="ml-2"
+    nzType="primary"
+    (click)="$event.preventDefault()"
+    *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')"
+    nz-popconfirm
+    nzPopconfirmTitle="Tutti i giorni già presenti saranno sovrascritti. Continuare?"
+    nzPopconfirmPlacement="top"
+    (nzOnConfirm)="updateTariffario()"
+  >
+    <i nz-icon nzType="reload"></i>Genera settimana di default
+  </button>
+</ng-container>

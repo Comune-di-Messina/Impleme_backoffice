@@ -1,0 +1,247 @@
+<div id="reporting-page">
+    <div class="row">
+        <div class="col-12">
+            <div class="title-container mb-4">
+                <h2 class="mb-0">Visualizza segnalazione</h2>
+                <!-- <p class="mb-0">Sottotitolo</p> -->
+            </div>
+
+
+            <div class="header-actions-container">
+                <button nz-button nzType="default" class="mr-3 mb-3 mt-1 btn btn-success" (click)="acceptModalVisible = true" *ngIf="availableActions.includes(1)"><i nz-icon nzType="check"></i>Accetta</button>
+                <button nz-button nzType="danger" nzDanger class="mr-3 mb-3 mt-1 btn btn-danger" (click)="refuseModalVisible = true" *ngIf="availableActions.includes(2)"><i nz-icon nzType="close"></i>Rifiuta</button>
+                <button nz-button nzType="primary" class="mr-3 mb-3 mt-1 btn btn-default" (click)="assignModalVisible = true" *ngIf="availableActions.includes(3) && users.length"><i nz-icon nzType="user-add"></i>Assegna utente</button>
+                <button nz-button nzType="secondary" nzDanger class="mr-3 mb-3 mt-1 btn btn-secondary" (click)="closeModalVisible = true" *ngIf="availableActions.includes(4)"><i nz-icon nzType="stop"></i>Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="main-details-card-container mb-3">
+                <nz-card [nzTitle]="cardTitle" [nzExtra]="extraTemplate">
+                    <h4 class="mb-1">{{ reporting?.title }}</h4>
+                    <h6 class="mb-4">{{ reporting?.type }}</h6>
+                    
+                    <div class="detail mb-4">
+                        <p class="mb-2" *ngIf="reporting.assignedTo">Assegnata a: <strong>[{{ reporting.assignedTo.id }}] {{ reporting.assignedTo.firstName }} {{ reporting.assignedTo.lastName }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.instituteDTO">Ente: <strong>{{ reporting.instituteDTO.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.sectorDTO">Settore: <strong>{{ reporting.sectorDTO.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.subSectorDTO">Sottosettore: <strong>{{ reporting.subSectorDTO.name }}</strong></p>
+                        <p class="mb-2" *ngIf="reporting.address">Indirizzo: <strong>{{ reporting.address }}</strong></p>
+                    </div>
+
+                    <div class="textarea-container">
+                        <textarea nz-input rows="6" placeholder="Messaggio" [readonly]="true">{{ reporting?.description }}</textarea>
+                    </div>
+                </nz-card>
+                <ng-template #extraTemplate>
+                    <label>Stato:&nbsp;</label>
+                    <nz-tag [nzColor]="getStatusColor(reporting.statusId)">{{ getActiveStatus(reporting.statusId)?.value }}</nz-tag>
+                </ng-template>
+            </div>
+
+            <div class="main-details-card-container mb-3" *ngIf="reporting.filesDTO.length">
+                <nz-card>
+                    <h4 class="mb-4">Allegati</h4>
+
+                    <ul>
+                        <li *ngFor="let file of reporting.filesDTO; let i = index"><a (click)="onDocumentClick(file.path, file.name)">{{ file.name }}</a></li>
+                    </ul>
+                </nz-card>
+            </div>
+
+            <div class="main-details-card-container timeline-container mb-3" *ngIf="reporting.reportingStep.length">
+                <nz-card>
+                    <h4 class="mb-4">Storico</h4>
+
+                    <nz-timeline nzMode="alternate">
+
+                        <nz-timeline-item *ngFor="let step of reporting.reportingStep; let key = index;">
+                            <div class="date-container mb-2" *ngIf="step.insertTs">
+                                {{ getDateTime(step.insertTs) }}
+                            </div>
+
+                            <div class="status mb-2" *ngIf="step.status">
+                                <nz-tag nzColor="blue">{{ step.status }}</nz-tag>
+                            </div>
+
+                            <div class="user-container mb-2" *ngIf="step.assignedTo">
+                                <label>Operatore:</label>
+                                <p>[{{ step.assignedTo.id }}] {{ step.assignedTo.firstName }} {{ step.assignedTo.lastName }}</p>
+                            </div>
+
+                            <div class="note-container mb-2" *ngIf="step.notePvt">
+                                <label>Nota privata:</label>
+                                <textarea nz-input class="note-textarea" cols="30" rows="4" readonly [value]="step.notePvt"></textarea>
+                            </div>
+
+                            <div class="note-container mb-2" *ngIf="step.notePublic">
+                                <label>Nota pubblica:</label>
+                                <textarea nz-input class="note-textarea" cols="30" rows="4" readonly [value]="step.notePublic"></textarea>
+                            </div>
+                        </nz-timeline-item>
+
+                        <nz-timeline-item nzColor="blue">
+                            <div class="reporting-step-container">
+                                <div class="date-container">
+                                    {{ getDateTime(reporting.insertTs) }}
+                                </div>
+                                <div class="status">
+                                    <nz-tag nzColor="blue">Inserita</nz-tag>
+                                </div>
+                            </div>
+                        </nz-timeline-item>
+                    </nz-timeline>
+                </nz-card>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="side-card-container mb-3" *ngIf="reporting.insertBy">
+                <nz-card class="actions-side-container user-details-container">
+                    <h5 class="mb-4">Utente</h5>
+
+                    <div class="avatar-container">
+                        <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="reporting.insertBy.imageUrl"></nz-avatar>
+                    </div>
+
+                    <ul class="user-details">
+                        <li>
+                            <label>Nome:</label>
+                            <span>{{ reporting.insertBy.firstName }} {{ reporting.insertBy.lastName }}</span>
+                        </li>
+                        <li>
+                            <label>Email:</label>
+                            <span>{{ reporting.insertBy.email }}</span>
+                        </li>
+                    </ul>
+                </nz-card>
+            </div>
+
+            <div class="side-card-container mb-3 maps-card">
+                <nz-card>
+                    <div class="map-container">
+                        <div #mapContainer id="map">
+                            <div class="not-available" *ngIf="reporting && (!reporting.latitude || !reporting.longitude)">Mappa non disponibile</div>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nz-modal 
+    [(nzVisible)]="acceptModalVisible" 
+    nzTitle="Accetta segnalazione"
+    [nzContent]="acceptModalContent"
+    [nzFooter]="acceptModalFooter"
+    (nzOnCancel)="acceptModalVisible = false" 
+>
+    <ng-template #acceptModalContent>
+        <nz-form-item>
+            <nz-form-label [nzRequired]="false" [nzSm]="24" [nzXs]="24" nzFor="note" class="text-left">Nota privata</nz-form-label>
+            <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="errorTip">
+                <textarea nz-input [(ngModel)]="privateNote" rows="4" placeholder="Inserisci una nota privata (Opzionale)"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+
+    <ng-template #acceptModalFooter>
+        <button nz-button nzType="default" (click)="acceptModalVisible = false">Chiudi</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="acceptReporting()">Invia</button>
+      </ng-template>
+</nz-modal>
+
+<nz-modal 
+    [(nzVisible)]="assignModalVisible"
+    nzTitle="Assegna segnalazione"
+    [nzContent]="assignModalContent"
+    [nzFooter]="assignModalFooter"
+    (nzOnCancel)="assignModalVisible = false"
+>
+    <ng-template #assignModalContent>
+        <form nz-form nzLayout="vertical" #assignReportingForm [formGroup]="validateAssignForm" (ngSubmit)="assignReporting()">
+
+            <nz-form-item>
+                <nz-form-label [nzRequired]="true" nzFor="user" class="text-left">Operatore</nz-form-label>
+                <nz-form-control nzErrorTip="Selezionare un operatore">
+                  <nz-select name="user" formControlName="user">
+                    <nz-option [nzValue]="user.id" [nzLabel]="'['+ user.id + '] ' + user.firstName + ' ' + user.lastName" *ngFor="let user of users"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzRequired]="false" [nzSm]="24" [nzXs]="24" nzFor="note" class="text-left">Nota privata</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="errorTip">
+                    <textarea nz-input formControlName="note" rows="4" placeholder="Inserisci una nota privata (Opzionale)"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-template>
+
+    <ng-template #assignModalFooter>
+        <button nz-button nzType="default" (click)="assignModalVisible = false">Chiudi</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="validateAssignForm.invalid" (click)="assignReporting()">Invia</button>
+      </ng-template>
+</nz-modal>
+
+<nz-modal 
+    [(nzVisible)]="refuseModalVisible"
+    nzTitle="Rifiuta segnalazione"
+    [nzContent]="refuseModalContent"
+    [nzFooter]="refuseModalFooter"
+    (nzOnCancel)="refuseModalVisible = false"
+>
+    <ng-template #refuseModalContent>
+        <form nz-form nzLayout="vertical" #refuseReportingForm [formGroup]="validateRefuseForm" (ngSubmit)="refuseReporting()">
+            <nz-form-item>
+                <nz-form-label [nzRequired]="false" [nzSm]="24" [nzXs]="24" nzFor="publicNote" class="text-left">Nota al cittadino</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="errorTip">
+                    <textarea nz-input formControlName="publicNote" rows="4" placeholder="Inserisci la nota da mostrare al cittadino"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-template>
+
+    <ng-template #refuseModalFooter>
+        <button nz-button nzType="default" (click)="refuseModalVisible = false">Chiudi</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="validateRefuseForm.invalid" (click)="refuseReporting()">Invia</button>
+      </ng-template>
+</nz-modal>
+
+<nz-modal 
+    [(nzVisible)]="closeModalVisible"
+    nzTitle="Chiudi segnalazione"
+    [nzContent]="closeModalContent"
+    [nzFooter]="closeModalFooter"
+    (nzOnCancel)="closeModalVisible = false"
+>
+    <ng-template #closeModalContent>
+        <form nz-form nzLayout="vertical" #closeReportingForm [formGroup]="validateCloseForm" (ngSubmit)="closeReporting()">
+
+            <nz-form-item>
+                <nz-form-label [nzRequired]="true" nzFor="status" class="text-left">Stato</nz-form-label>
+                <nz-form-control nzErrorTip="Selezionare uno stato">
+                  <nz-select name="status" formControlName="status">
+                    <nz-option [nzValue]="status.id" [nzLabel]="status.value" *ngFor="let status of closeStatuses"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+            </nz-form-item>   
+
+            <nz-form-item>
+                <nz-form-label [nzRequired]="false" [nzSm]="24" [nzXs]="24" nzFor="note" class="text-left">Nota al cittadino</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="errorTip">
+                    <textarea nz-input formControlName="note" rows="4" placeholder="Nota al cittadino"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-template>
+
+    <ng-template #closeModalFooter>
+        <button nz-button nzType="default" (click)="closeModalVisible = false">Chiudi</button>
+        <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="validateCloseForm.invalid" (click)="closeReporting()">Invia</button>
+      </ng-template>
+</nz-modal>

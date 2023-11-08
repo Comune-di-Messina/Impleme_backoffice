@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col-md-12 mb-4">
+    <nz-alert
+      nzType="error"
+      nzMessage="Attenzione"
+      [nzDescription]="errorSave"
+      nzShowIcon
+      *ngIf="errorSave"
+    >
+    </nz-alert>
+    <!-- <nz-alert
+      nzType="success"
+      nzMessage="Operazione completata"
+      [nzDescription]="successMessage"
+      nzShowIcon
+      nzCloseText="Chiudi"
+      (nzOnClose)="(onAlertClose)"
+      *ngIf="successMessage"
+    >
+    </nz-alert> -->
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-lg-12">
+    <h2 class="mb-0">
+      Tipologia pratica
+    </h2>
+    <p *ngIf="isEditable">
+      Modifica la tipologia pratica
+    </p>
+    <p *ngIf="!isEditable">
+      Visualizzala tipologia pratica
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="codice" class="text-left"
+          >Codice</nz-form-label
+        >
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il codice">
+          <input nz-input formControlName="codice" placeholder="Inserisci il codice..." [readonly]="!isEditable" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nome" class="text-left">Nome</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il nome">
+          <input nz-input formControlName="nome" placeholder="Inserisci il nome..." [readonly]="!isEditable" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="descrizione" class="text-left"
+          >Descrizione</nz-form-label
+        >
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la descrizione della tipologia di pratica visualizzata al cittadino">
+          <input nz-input formControlName="descrizione" placeholder="Inserisci la descrizione della tipologia di pratica visualizzata al cittadino" [readonly]="!isEditable" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="importo" class="text-left"
+          >Importo</nz-form-label
+        >
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci l'importo della tipologia di pratica">
+          <!-- <input nz-input-number formControlName="importo" placeholder="Inserisci l'importo della tipologia di pratica" [readonly]="!isEditable" /> -->
+          <nz-input-number formControlName="importo" [nzMin]="1" placeholder="Inserisci l'importo della tipologia di pratica"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="libero" class="text-left"
+          >Testo Libero</nz-form-label
+        >
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci le istruzioni per compilare la richiesta da parte del cittadino">
+          <input nz-input formControlName="libero" placeholder="Inserisci le istruzioni per compilare la richiesta da parte del cittadino" [readonly]="!isEditable" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzRequired]="false" [nzSm]="4" [nzXs]="24" nzFor="note" class="text-left"
+          >Note</nz-form-label
+        >
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il nome del campo visualizzato all'utente">
+          <textarea
+            nz-input
+            formControlName="note"
+            rows="4"
+            placeholder="Inserisci il nome del campo visualizzato all'utente"
+            [readonly]="!isEditable"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="icon" class="text-left" *ngIf="isEditable"
+          >Immagine (Max. 1MB)</nz-form-label
+        >
+        <nz-form-control>
+          <nz-avatar
+            [nzShape]="'square'"
+            [nzSize]="64"
+            [nzText]="'Image'"
+            [nzSrc]="
+              imageUpload
+                ? imageUpload
+                : tipologia.img
+                ? 'data:image/jpeg;base64,' + tipologia.img
+                : null
+            "
+          ></nz-avatar>
+          <input
+            nz-button
+            type="file"
+            accept="image/*"
+            name="image"
+            (change)="onImageChanged($event.target.files)"
+            *ngIf="isEditable"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="isEditable">
+        <nz-form-control>
+          <button type="submit" class="btn btn-success px-5" [disabled]="validateForm.invalid">
+            Salva
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="row mb-1">
+    <div class="col-lg-12">
+        <h2 class="mb-0" *ngIf="pageTitle">
+            {{ pageTitle }}
+        </h2>
+        <p *ngIf="pageSubtitle">
+            {{ pageSubtitle }}
+        </p>
+
+        <a nz-button nzType="default" class="mt-2" routerLink="/prenota-ufficio/services">
+            <i nz-icon nzType="left" nzTheme="outline"></i> Indietro
+        </a>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="true" [nzSm]="4" [nzXs]="24" nzFor="name" class="text-left">Nome</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci il nome">
+                            <input nz-input formControlName="name" placeholder="Inserisci il nome..." required />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="true" [nzSm]="4" [nzXs]="24" nzFor="type" class="text-left">Tipologia</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="serviceTypeErrorTpl">
+                          <nz-select name="typeId" formControlName="typeId">
+                            <nz-option [nzValue]="service.id" [nzLabel]="service.name" *ngFor="let service of serviceTypes"></nz-option>
+                          </nz-select>
+
+                          <ng-template #serviceTypeErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                              Selezionare un nome
+                            </ng-container>
+                          </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="false" [nzSm]="4" [nzXs]="24" nzFor="description" class="text-left">Descrizione</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="errorTip">
+                            <textarea nz-input name="description" formControlName="description" rows="4" placeholder="Inserisci una descrizione (Opzionale)"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="false" [nzSm]="4" [nzXs]="24" nzFor="notes" class="text-left">Note</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="errorTip">
+                            <textarea nz-input name="notes" formControlName="notes" rows="4" placeholder="Inserisci una nota (Opzionale)"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="false" [nzSm]="4" [nzXs]="24" nzFor="labelField" class="text-left">Label campo</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la label del campo">
+                            <input nz-input formControlName="labelField" placeholder="Inserisci la label del campo..." />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="false" [nzSm]="4" [nzXs]="24" nzFor="fieldNotes" class="text-left">Note campo</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="errorTip">
+                            <textarea nz-input name="fieldNotes" formControlName="fieldNotes" rows="4" placeholder="Inserisci una nota (Opzionale)"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="mandatoryField" class="text-left">Campo obbligatorio</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Campo obbligatorio">
+                            <label nz-checkbox formControlName="mandatoryField" [nzChecked]="publicService.mandatoryField" [nzValue]="true">
+                            </label>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzRequired]="true" [nzSm]="4" [nzXs]="24" nzFor="reservationType" class="text-left">Tipologia prenotazione</nz-form-label>
+                        <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="serviceTypeErrorTpl">
+                          <nz-select name="reservationType" formControlName="reservationType">
+                            <nz-option [nzValue]="reservationType" [nzLabel]="reservationType" *ngFor="let reservationType of reservationTypesKeys; let key = index;"></nz-option>
+                          </nz-select>
+
+                          <ng-template #serviceTypeErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                              Selezionare una tipologia
+                            </ng-container>
+                          </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-control class="item-actions-container">
+                            <a routerLink="/prenota-ufficio/services" class="btn btn-default px-5">Indietro</a>
+
+                            <button type="submit" class="btn btn-success px-5" [disabled]="!validateForm.valid">
+                                Salva
+                            </button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

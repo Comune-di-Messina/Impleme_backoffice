@@ -1,0 +1,13 @@
+:host::ng-deep {
+  .table-icon {
+    max-width: 40px;
+  }
+
+  table {
+    tbody {
+      tr {
+        background-color: #fff;
+      }
+    }
+  }
+}

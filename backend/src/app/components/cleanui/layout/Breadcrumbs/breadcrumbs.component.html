@@ -1,0 +1,16 @@
+<div class="breadcrumbs">
+  <div class="path">
+    <button nz-button nzGhost nzType="primary" (click)="onBackClick()" style="margin-right:24px" *ngIf="isBackAvailable"><i nz-icon nzType="left"></i>{{ 'topBar.Back' | translate}}</button>
+    <a href routerLink="/">Home</a>
+    <ng-container *ngFor="let item of breadcrumbs; let last = last;">
+      <span *ngIf="!last">
+        <span class="arrow"></span>
+        <a (click)="onItemClick(item)">{{ item.title }}</a>
+      </span>
+      <span *ngIf="last">
+        <span class="arrow"></span>
+        <strong class="current">{{ item.title }}</strong>
+      </span>
+    </ng-container>
+  </div>
+</div>

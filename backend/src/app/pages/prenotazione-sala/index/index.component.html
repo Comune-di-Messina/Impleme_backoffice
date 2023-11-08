@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class="mb-0">Prenotazioni confermate</h2>
+        <p>Visualizza tutte le prenotazioni confermate</p>
+        <p class="mb-2">
+          <button nz-button nzType="default" (click)="resetSearch()"><i nz-icon nzType="undo" nzTheme="outline"></i> Reset filtri</button>
+        </p>
+      <!-- </div>
+      <div class="card-body" nzAutoHeightDiv> -->
+        <nz-table
+          #nzTable
+          nzShowPagination
+          nzShowSizeChanger
+          [nzPageSize]="10"
+          [nzScroll]="{ y: scrollSize }"
+          [nzData]="search()"
+          [nzLoading]="stateLoading"
+        >
+          <thead>
+            <tr>
+              <th [nzSortFn]="sortNumeroPratica"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  nzCustomFilter>
+                Numero pratica
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.numeroPratica"
+                  [nzActive]="searchForm.numeroPratica?.length > 0"
+                  [nzDropdownMenu]="menuSearchNumeroPratica">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+              </th>
+              <th [nzSortFn]="sortByDataPrenotazione">
+                Data pren.
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">
+                Tit. evento
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">
+                Desc. evento
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null"
+                  nzCustomFilter>
+                <nz-filter-trigger
+                  [(nzVisible)]="searchFiltersVisible.numeroPratica"
+                  [nzActive]="searchForm.numeroPratica?.length > 0"
+                  [nzDropdownMenu]="menuSearchInstitute">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                Ente
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Sala</th>
+              <th [nzSortFn]="sortByDataPrenotazione"
+                  key="giornoDa"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">
+                Giorno Da
+              </th>
+              <th [nzSortFn]="sortByDataPrenotazione"
+                  key="giornoA"
+                  [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">
+                Giorno A
+              </th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Ora Da</th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Ora A</th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Importo</th>
+              <th [nzSortDirections]="['ascend', 'descend', null]"
+                  [nzSortOrder]="null">Importo servizi</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let roomBooking of nzTable.data">
+              <td>{{ roomBooking.numeroPratica }}</td>
+              <td>{{ getDateFormat(roomBooking.dataPrenotazione) }}</td>
+              <td>{{ roomBooking.titoloEvento }}</td>
+              <td>{{ roomBooking.descrizioneEvento }}</td>
+              <td>{{ getEnteDescrizione(roomBooking) }}</td>
+              <td>{{ getRoomNome(roomBooking) }}</td>
+              <td>{{ roomBooking.giornoDa | dateLocalized }}</td>
+              <td>{{ roomBooking.giornoA | dateLocalized }}</td>
+              <td>{{ roomBooking.oraDa }}</td>
+              <td>{{ roomBooking.oraA }}</td>
+              <td>{{ roomBooking.importo | currencyLocalized }}</td>
+              <td>{{ roomBooking.importoServizi | currencyLocalized }}</td>
+              <td>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Dettaglio'"
+                  class="mr-3 btn btn-outline-primary"
+                  (click)="onViewModel(roomBooking)"
+                >
+                  <i nz-icon nzType="eye"></i>
+                </button>
+                <button
+                  *ngIf="revocabile(roomBooking)"
+                  nz-button
+                  [nzSize]="12"
+                  nzType="danger"
+                  class="mr-3 mb-3"
+                  (click)="onDeleteModel(roomBooking)"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <nz-dropdown-menu #menuSearchNumeroPratica="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Cerca pratica" [(ngModel)]="searchForm.numeroPratica" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('numeroPratica')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menuSearchInstitute="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <nz-select name="institute" nzAllowClear [(ngModel)]="searchForm.ente">
+                <nz-option [nzValue]="institute.codice" [nzLabel]="institute.descrizione" *ngFor="let institute of getEnti()"></nz-option>
+              </nz-select>
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                Cerca
+              </button>
+              <button nz-button nzSize="small" (click)="resetSearch('institute')">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

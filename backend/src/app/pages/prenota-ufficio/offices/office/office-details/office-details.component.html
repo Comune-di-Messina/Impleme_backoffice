@@ -1,0 +1,88 @@
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="">
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="true" [nzSm]="8" [nzXs]="24" nzFor="name" class="text-left">Nome</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Inserisci il nome">
+                        <input nz-input formControlName="name" [value]="office?.name" placeholder="Inserisci il nome..." required />
+                    </nz-form-control>
+                </nz-form-item>
+            
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="description" class="text-left">Descrizione</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="errorTip">
+                        <textarea nz-input formControlName="description" [value]="office?.description" rows="4" placeholder="Inserisci una descrizione (Opzionale)"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="address" class="text-left">Indirizzo</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Inserisci l'indirizzo">
+                        <input #gmapAutocomplete nz-input formControlName="address" [value]="office?.address" placeholder="Inserisci l'indirizzo..." />
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="latitude" class="text-left">Latitudine</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="">
+                        <input nz-input type="number" formControlName="latitude" [value]="office?.coordinates.latitude" placeholder="Inserisci la latitudine..." />
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="longitude" class="text-left">Longitudine</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="">
+                        <input nz-input type="number" formControlName="longitude" [value]="office?.coordinates.longitude" placeholder="Inserisci la longitudine..." />
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="telephoneNumber" class="text-left">Telefono</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Inserisci il numero di telefono">
+                        <input nz-input formControlName="telephoneNumber" [value]="office?.telephoneNumber" placeholder="Inserisci il numero di telefono..." />
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="email" class="text-left">Email</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Inserisci l'indirizzo email">
+                        <input nz-input type="email" formControlName="email" [value]="office?.email" placeholder="Inserisci l'indirizzo email..." />
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="site" class="text-left">Website</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="">
+                        <input nz-input formControlName="site" [value]="office?.site" placeholder="Inserisci il sito web..." />
+                    </nz-form-control>
+                </nz-form-item>
+        
+                <nz-form-item>
+                    <nz-form-label [nzRequired]="false" [nzSm]="8" [nzXs]="24" nzFor="imageUrl" class="text-left">Immagine URL</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Inserisci l'url dell'immagine">
+                        <input nz-input formControlName="imageUrl" [value]="office?.imageUrl" placeholder="Inserisci l'url dell'immagine..." />
+                    </nz-form-control>
+                </nz-form-item>
+            
+                <nz-form-item>
+                    <nz-form-control class="item-actions-container">
+                        <button type="submit" class="btn btn-success px-5" [disabled]="!validateForm.valid">
+                            Salva
+                        </button>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </div>        
+    </div>
+    <div class="col-md-4">
+        <div class="side-card-container mb-3 maps-card">
+            <div class="map-container">
+                <div #mapContainer id="map">
+                    <div class="not-available" *ngIf="office && (!latitude || !longitude)">Mappa non disponibile</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

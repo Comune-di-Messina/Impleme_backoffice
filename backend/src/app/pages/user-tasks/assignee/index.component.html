@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class=" mb-0">
+          Lista prenotazioni prese in carico
+        </h2>
+        <p>
+          Visualizza tutte le prenotazioni prese in carico
+        </p>
+      <!-- </div>
+      <div class="card-body"> -->
+        <nz-table
+          nzShowPagination
+          nzShowSizeChanger
+          [nzPageSize]="10"
+          [nzScroll]="{ y: scrollSize }"
+          (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+          [nzData]="taskList"
+        >
+          <thead>
+            <tr>
+              <th
+                *ngFor="let column of listOfColumns"
+                [nzSortOrder]="column.sortOrder"
+                [nzSortFn]="column.sortFn"
+                [nzSortDirections]="column.sortDirections"
+                [nzFilterMultiple]="column.filterMultiple"
+                [nzFilters]="column.listOfFilter"
+                [nzFilterFn]="column.filterFn"
+              >
+                {{ column.name }}
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of taskListInPage">
+              <td>{{ task.roomBooking?.id }}</td>
+              <td>{{ task.roomBooking?.numeroPratica }}</td>
+              <td>{{ task.roomBooking?.dataPrenotazione }}</td>
+              <td>{{ task.roomBooking?.titoloEvento }}</td>
+              <td>{{ task.roomBooking?.descrizioneEvento }}</td>
+              <td>{{ task.roomBooking?.nome }}</td>
+              <td>{{ task.roomBooking?.giornoDa | dateLocalized }}</td>
+              <td>{{ task.roomBooking?.giornoA | dateLocalized }}</td>
+              <td>{{ task.roomBooking?.oraDa }}</td>
+              <td>{{ task.roomBooking?.oraA }}</td>
+              <td>{{ task.roomBooking?.importo | currencyLocalized }}</td>
+              <td>{{ task.roomBooking?.importoServizi | currencyLocalized }}</td>
+              <td>
+                <button
+                  nz-tooltip
+                  [nzTooltipTitle]="'Modifica'"
+                  class="mr-3 btn btn-outline-primary"
+                  (click)="onUpdateModel(task)"
+                  *ngIf="getAclService().checkRoute('user-tasks/complete')"
+                >
+                  <i nz-icon nzType="edit"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

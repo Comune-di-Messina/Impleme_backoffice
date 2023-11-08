@@ -1,0 +1,179 @@
+<div class="row mb-4">
+  <div class="col-lg-12">
+    <h2 class="mb-0">Segnalazioni</h2>
+    
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <p class="mb-2">
+          <button nz-button nzType="default" (click)="resetForm()"><i nz-icon nzType="undo" nzTheme="outline"></i> Reset filtri</button>
+        </p>
+
+        <div class="table-container">
+            <nz-table
+            nzShowSizeChanger
+            [nzData]="reportings"
+            [nzFrontPagination]="false"
+            [nzLoading]="loadingResults"
+            [nzTotal]="totalResults"
+            [nzPageSize]="pageSize"
+            [nzPageIndex]="pageIndex"
+            (nzPageIndexChange)="onChangePage($event)"
+            (nzQueryParams)="onQueryParamsChange($event)"
+          >
+            <thead>
+              <tr>
+                <th nzColumnKey="insertTs" [nzSortFn]="true" [nzSortOrder]="'descend'" nzCustomFilter>
+                  Data
+                  <nz-filter-trigger [nzActive]="searchForm.dateRange" [(nzVisible)]="searchFiltersVisible.dateRange" [nzDropdownMenu]="menuDateRange">
+                    <i nz-icon nzType="search"></i>
+                  </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="id" [nzSortFn]="true" nzCustomFilter>
+                  ID
+                  <nz-filter-trigger [nzActive]="searchForm.id" [(nzVisible)]="searchFiltersVisible.id" [nzDropdownMenu]="menuSearchId">
+                    <i nz-icon nzType="search"></i>
+                  </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="institute" nzCustomFilter>
+                  Ente
+                  <nz-filter-trigger [nzActive]="searchForm.institute" [(nzVisible)]="searchFiltersVisible.institute" [nzDropdownMenu]="menuSearchInstitute">
+                    <i nz-icon nzType="search"></i>
+                  </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="sector" nzCustomFilter>
+                  Settore
+                  <nz-filter-trigger [nzActive]="searchForm.sector" [(nzVisible)]="searchFiltersVisible.sector" [nzDropdownMenu]="menuSearchSector">
+                    <i nz-icon nzType="search"></i>
+                  </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="title" nzCustomFilter>
+                  Titolo
+                  <nz-filter-trigger [nzActive]="searchForm.text" [(nzVisible)]="searchFiltersVisible.text" [nzDropdownMenu]="menuSearchTitle">
+                    <i nz-icon nzType="search"></i>
+                  </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="type">Tipo</th>
+                <th nzColumnKey="statusId" [nzSortFn]="true" nzCustomFilter>
+                  Stato
+                  <nz-filter-trigger [nzActive]="searchForm.status" [(nzVisible)]="searchFiltersVisible.status" [nzDropdownMenu]="menuSearchStatus">
+                    <i nz-icon nzType="search"></i>
+                  </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="actions">Azioni</th>
+                <!-- <th nzColumnKey="gender" [nzFilters]="filterGender" [nzFilterFn]="true">Gender</th>
+                <th nzColumnKey="email" [nzSortFn]="true">Email</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of reportings">
+                <td>{{ getDateTime(data.insertTs) }}</td>
+                <td>{{ data.id }}</td>
+                <td>{{ data.instituteDTO.name }}</td>
+                <td>{{ data.sectorDTO?.name }}</td>
+                <td>{{ data.title }}</td>
+                <td>{{ data.type }}</td>
+                <td [ngClass]="['status-' + data.statusId]">
+                  <nz-tag [nzColor]="getStatusColor(data.statusId)">{{ getActiveStatus(data.statusId)?.value }}</nz-tag>
+                </td>
+                <td>
+                  <app-acl-route route="segnalame">
+                    <a
+                    nz-tooltip
+                    [nzTooltipTitle]="'Visualizza'"
+                    class="mr-3 btn btn-outline-primary"
+                    [routerLink]="'/segnalame/reportings/view/' + data.id"
+                    >
+                        <i nz-icon nzType="eye"></i>
+                    </a>
+                  </app-acl-route>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+
+          <nz-dropdown-menu #menuDateRange="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <div class="mb-2">
+                  <nz-range-picker  [(ngModel)]="searchForm.dateRange" (ngModelChange)="onDateChange($event)"></nz-range-picker>
+                </div>
+                
+                <button nz-button nzSize="small" nzType="primary" (click)="searchReportings(true)" class="search-button">
+                  Cerca
+                </button>
+                <button nz-button nzSize="small" (click)="resetForm('dateRange')">Reset</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <nz-dropdown-menu #menuSearchId="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <input type="text" nz-input placeholder="Cerca ID" [(ngModel)]="searchForm.id" />
+                <button nz-button nzSize="small" nzType="primary" (click)="searchReportings(true)" class="search-button">
+                  Cerca
+                </button>
+                <button nz-button nzSize="small" (click)="resetForm('id')">Reset</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <nz-dropdown-menu #menuSearchInstitute="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <nz-select name="institute" nzAllowClear [(ngModel)]="searchForm.institute">
+                  <nz-option [nzValue]="institute.id" [nzLabel]="institute.name" *ngFor="let institute of (institutes | orderBy:'asc':'name')"></nz-option>
+                </nz-select>
+                <button nz-button nzSize="small" nzType="primary" (click)="searchReportings(true)" class="search-button">
+                  Cerca
+                </button>
+                <button nz-button nzSize="small" (click)="resetForm('institute')">Reset</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <nz-dropdown-menu #menuSearchSector="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <nz-select name="sector" nzAllowClear [(ngModel)]="searchForm.sector">
+                  <nz-option [nzValue]="sector.id" [nzLabel]="sector.name" *ngFor="let sector of (sectors | orderBy:'asc':'name')"></nz-option>
+                </nz-select>
+                <button nz-button nzSize="small" nzType="primary" (click)="searchReportings(true)" class="search-button">
+                  Cerca
+                </button>
+                <button nz-button nzSize="small" (click)="resetForm('sector')">Reset</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <nz-dropdown-menu #menuSearchTitle="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <input type="text" nz-input placeholder="Cerca Titolo" [(ngModel)]="searchForm.text" />
+                <button nz-button nzSize="small" nzType="primary" (click)="searchReportings(true)" class="search-button">
+                  Cerca
+                </button>
+                <button nz-button nzSize="small" (click)="resetForm('text')">Reset</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <nz-dropdown-menu #menuSearchStatus="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <nz-select name="status" nzAllowClear [(ngModel)]="searchForm.status">
+                  <nz-option [nzValue]="status.id" [nzLabel]="status.value" *ngFor="let status of (statuses | orderBy:'asc':'value')"></nz-option>
+                </nz-select>
+                <button nz-button nzSize="small" nzType="primary" (click)="searchReportings(true)" class="search-button">
+                  Cerca
+                </button>
+                <button nz-button nzSize="small" (click)="resetForm('status')">Reset</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="row">
+
+  <div class="col-lg-12">
+    <div>
+      <nz-alert nzType="error" nzMessage="Attenzione" [nzDescription]="errorSave" nzShowIcon *ngIf="errorSave">
+      </nz-alert>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <h2 class=" mb-0">
+          Crea tariffa
+        </h2>
+        <p>
+          Inserisci una nuova tariffa
+        </p>
+      <!-- </div>
+      <div class="card-body"> -->
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Descrizione</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la descrizione">
+              <textarea nz-input rows="5" formControlName="descrizione"
+                placeholder="Inserisci la descrizione..."></textarea>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">PEG</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci PEG">
+              <input nz-input formControlName="peg" placeholder="Inserisci PEG..." />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Importo unitario</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci l'importo unitario">
+              <nz-input-number
+                formControlName="importoUnitario"
+                placeholder="Inserisci l'importo unitario..."
+                [nzMin]	= "0"
+                [nzStep]="0.01"
+                [nzFormatter] = "formatterEuro"
+                [nzParser] = "parserEuro"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Importo modificabile
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica se l'importo è modificabile">
+              <nz-select name="select-validate" formControlName="isImportoEditable">
+                <nz-option nzValue="true" nzLabel="Si"></nz-option>
+                <nz-option nzValue="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Quantità</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Inserisci la quantità">
+              <nz-input-number
+                formControlName="quantita"
+                placeholder="Inserisci la quantità..."
+                [nzMin]	= "0"
+                [nzStep]="1"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="full-name" class="text-left">Quantità modificabile
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Specifica se la quantità è modificabile">
+              <nz-select name="select-validate" formControlName="isQuantitaEditable">
+                <nz-option nzValue="true" nzLabel="Si"></nz-option>
+                <nz-option nzValue="false" nzLabel="No"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-control>
+              <button type="submit" class="btn btn-success px-5" [disabled]="validateForm.invalid">
+                Salva
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

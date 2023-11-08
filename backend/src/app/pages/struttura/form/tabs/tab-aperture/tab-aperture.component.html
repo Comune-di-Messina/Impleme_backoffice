@@ -1,0 +1,57 @@
+<ng-container [formGroup]="validateForm">
+  <nz-table
+    #basicTable
+    [nzFrontPagination]=false
+    [nzData]="[].constructor(aperture.controls.length)"
+    formArrayName="aperture"
+  >
+    <thead>
+      <tr>
+        <th>Giorno della settimana</th>
+        <th>Orario inizio</th>
+        <th>Orario fine</th>
+        <th *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">Elimina</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of aperture.controls; let i = index" [formGroupName]="i">
+        <td>
+          <nz-select formControlName="giorno" [nzOptions]="giorniDisponibili(i)" style="width:100%">
+          </nz-select>
+        </td>
+        <td>
+          <nz-time-picker
+            formControlName="oraDa"
+            [nzMinuteStep]="30"
+            [nzSecondStep]="60"
+            nzSize="large"
+            (ngModelChange)="topOfTheHour($event);"
+          ></nz-time-picker>
+        </td>
+        <td>
+          <nz-time-picker
+            formControlName="oraA"
+            [nzMinuteStep]="30"
+            [nzSecondStep]="60"
+            nzSize="large"
+            (ngModelChange)="topOfTheHour($event);"
+          ></nz-time-picker>
+        </td>
+        <td *ngIf="checkRoute('struttura/create') ||  checkRoute('struttura/update')">
+          <button
+            nz-button
+            nzType="default"
+            nzDanger
+            (click)="delApertura(i); $event.preventDefault()"
+          >
+            <i nz-icon nzType="delete" nzTheme="outline"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <button nz-button class="mt-2" nzType="primary" (click)="addApertura(); $event.preventDefault()" *ngIf="giorniDisponibili(-1).length">
+    <i nz-icon nzType="plus"></i>Aggiungi
+  </button>
+</ng-container>

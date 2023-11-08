@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="col-lg-12">
+    <!-- <div class="card">
+      <div class="card-header"> -->
+        <nz-alert
+          nzType="error"
+          nzMessage="Attenzione"
+          [nzDescription]="errorMessage"
+          nzShowIcon
+          *ngIf="errorMessage"
+          (nzOnClose)="this.clearMessages"
+        >
+        </nz-alert>
+        <nz-alert
+          nzType="success"
+          nzMessage="Tributo salvato con successo"
+          [nzDescription]="successMessage"
+          nzShowIcon
+          *ngIf="successMessage"
+          (nzOnClose)="this.clearMessages"
+        >
+        </nz-alert>
+        <h2 class="mb-0">
+          Lista tributi
+        </h2>
+        <p>
+          Visualizza tutti i tributi
+        </p>
+        <div class="row" *ngIf="checkRoute('tributi/create')">
+          <button nz-button nzType="success" class="mr-3 mb-3" (click)="onCreateTributo()">Crea</button>
+          <button nz-button nzType="success" class="mr-3 mb-3" (click)="onDownlaodTributiCSV()">Scarica CSV</button>
+        </div>
+
+      <!-- </div>
+      <div class="card-body"> -->
+        <nz-table [nzData]="tributoList" [nzShowPagination]="false" class="kit__utils__table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Descrizione</th>
+              <!-- <th>Spontaneo</th> -->
+              <!-- <th>Validazione</th> -->
+              <th>Anno</th>
+              <!-- <th>Giorni scadenza</th> -->
+              <!-- <th>Diritti segreteria</th> -->
+              <th>Paga diritti segreteria?</th>
+              <!-- <th>Prenotazione spazio</th> -->
+              <th>Tipo</th>
+              <th>Data creazione</th>
+              <th>Data attivazione</th>
+              <!-- <th>Attributi</th> -->
+              <th>Tariffe</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tributo of tributoList">
+              <td>{{tributo.NomeTributo}}</td>
+              <td>{{tributo.DescrizioneTributo}}</td>
+              <!-- <td>{{tributo.spontaneo | boolean }}</td> -->
+              <!-- <td>{{tributo.validazione | boolean }}</td> -->
+              <td>{{tributo.anno}}</td>
+              <!-- <td>{{tributo.giorniScadenza}}</td> -->
+              <!-- <td>{{tributo.dirittiSegreteria | boolean}}</td> -->
+              <td>{{tributo.pagaDirittiSegreteria | boolean}}</td>
+              <!-- <td>{{tributo.prenotaSpazio | boolean}}</td> -->
+              <td>{{tributo.TipoTributo}}</td>
+              <td>{{tributo.DataCreazione | dateLocalized }}</td>
+              <td>{{tributo.DataAttivazione | dateLocalized }}</td>
+              <!-- <td><button nz-button [nzSize]="size" nzType="success" class="mr-3 mb-3"  (click)="onAttributiTributo(tributo)">Attributi</button></td> -->
+              <td><button nz-button [nzSize]="size" nzType="success" class="mr-3 mb-3" (click)="onTariffeTributo(tributo)">Tariffe</button></td>
+              <td><button nz-button [nzSize]="size" nzType="danger" class="mr-3 mb-3" (click)="onDeleteTributo(tributo)" *ngIf="this.getAclService().checkRoute('tributi/create')"><i nz-icon nzType="delete"></i></button></td>
+            </tr>
+          </tbody>
+        </nz-table>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>

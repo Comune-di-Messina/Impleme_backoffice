@@ -1,0 +1,32 @@
+<div *ngIf="showLoginForm">
+  <div class="text-center mb-5">
+    <h1 class="mb-5 px-3">
+      <strong>Backoffice Portale di Messina</strong>
+    </h1>
+  </div>
+  <div class="card boxContainer">
+    <div class="text-dark font-size-24 mb-3">
+      <strong>Accedi</strong>
+    </div>
+
+    <button class="btn btn-success mr-1" (click)="login()">login</button>
+    <!--<br />
+    <button class="btn btn-success mr-1" (click)="logout()">logout</button>-->
+  </div>
+
+  <!--<table class="table table-bordered table-sm table-props">
+    <tr><th>Identity URL</th><td><code>{{authIdentity}}</code></td></tr>
+    <tr><th>API URL</th><td><code>{{authAPI}}</code></td></tr>
+    <tr><th>Client ID</th><td><code>{{clientId}}</code></td></tr>
+    <tr><th>Issuer URL</th><td><code>{{issuer}}</code></td></tr>
+    <tr><th>IsAuthenticated</th><td><code>{{isAuthenticated | async}}</code></td></tr>
+    <tr><th>HasValidToken</th><td><code>{{hasValidToken}}</code></td></tr>
+    <tr><th>IsDoneLoading</th><td><code>{{isDoneLoading | async}}</code></td></tr>
+    <tr><th>CanActivateProtectedRoutes</th><td><code>{{canActivateProtectedRoutes | async}}</code></td></tr>
+    <tr><th>IdentityClaims</th><td class="pre"><code>{{identityClaims | json}}</code></td></tr>
+    <tr><th>RefreshToken</th><td><code class="break-all">{{refreshToken}}</code></td></tr>
+    <tr><th>AccessToken</th><td><code class="break-all">{{accessToken}}</code></td></tr>
+    <tr><th>IdToken</th><td><code class="break-all">{{idToken}}</code></td></tr>
+  </table>-->
+</div>
+<div class="initial__loading" *ngIf="!showLoginForm"></div>

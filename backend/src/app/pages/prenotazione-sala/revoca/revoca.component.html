@@ -1,0 +1,35 @@
+<div class="row">
+
+    <div class="col-lg-12">
+        <div>
+            <nz-alert nzType="error" nzMessage="Attenzione" [nzDescription]="saveFormError" nzShowIcon
+                *ngIf="saveFormError">
+            </nz-alert>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- <div class="card">
+            <div class="card-header"> -->
+                <h2 class="mb-0">
+                    <strong>Revoca della prenotazione</strong>
+                </h2>
+                <p>
+                    Revoca della prenotazione
+                </p>
+                <button nz-button nzType="danger" class="mr-3 mb-3 mt-1 btn btn-danger" [disabled]="validateForm.invalid"
+                    (click)="submitForm()">Esegui revoca</button>
+<!-- 
+            </div>
+            <div class="card-body"> -->
+                <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+                    <bsm-ui-form-item-input formControlName="motivo" label="Motivo" placeholder="Inserisci il motivo"></bsm-ui-form-item-input>
+
+
+                </form>
+            <!-- </div>
+        </div> -->
+    </div>
+</div>
